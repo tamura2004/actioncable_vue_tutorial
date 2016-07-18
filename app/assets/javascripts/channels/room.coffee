@@ -1,5 +1,6 @@
 $ ->
-  new Vue
+  Vue.config.devtools = true
+  App.vue = new Vue
     el: "#messages"
     data:
       messages: []
@@ -10,20 +11,14 @@ $ ->
         (res)-> console.log res
       )
 
-      App.room = App.cable.subscriptions.create "RoomChannel",
-        connected: ->
-        disconnected: ->
-        received: (data) -> @messages.unshift data["message"]
-        speak: (message) -> @perform 'speak', message: message
-
     methods:
       speak: (event)->
         App.room.speak event.target.value
         event.target.value = ""
 
+  App.room = App.cable.subscriptions.create "RoomChannel",
+    connected: ->
+    disconnected: ->
+    received: (data) -> App.vue.messages.unshift data["message"]
+    speak: (message) -> @perform 'speak', message: message
 
-# $(document).on "keypress", "[data-behavior~=room_speaker]",(event) ->
-#   if event.keyCode is 13
-#     App.room.speak event.target.value
-#     event.target.value = ""
-#     event.preventDefault()
