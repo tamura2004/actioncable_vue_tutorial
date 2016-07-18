@@ -1,8 +1,6 @@
 h1 Chat room
-#messages
-  = render @messages
+ul.list-group
+  li.list-group-item v-for="message in messages" v-text="message"
 
-form
-  label Say something:
-  br
-  input type="text" data-behavior="room_speaker"
+label Say something:
+input type="text" @keydown.enter.prevent="speak"

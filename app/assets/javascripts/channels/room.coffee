@@ -1,19 +1,29 @@
-App.room = App.cable.subscriptions.create "RoomChannel",
-  connected: ->
-    # Called when the subscription is ready for use on the server
+$ ->
+  new Vue
+    el: "#messages"
+    data:
+      messages: []
 
-  disconnected: ->
-    # Called when the subscription has been terminated by the server
+    created: ->
+      @$http.get("/messages.json").then(
+        (res)-> @messages = res.data
+        (res)-> console.log res
+      )
 
-  received: (data) ->
-    $("#messages").append data["message"]
-    # Called when there's incoming data on the websocket for this channel
+      App.room = App.cable.subscriptions.create "RoomChannel",
+        connected: ->
+        disconnected: ->
+        received: (data) -> @messages.unshift data["message"]
+        speak: (message) -> @perform 'speak', message: message
 
-  speak: (message) ->
-    @perform 'speak', message: message
+    methods:
+      speak: (event)->
+        App.room.speak event.target.value
+        event.target.value = ""
 
-$(document).on "keypress", "[data-behavior~=room_speaker]",(event) ->
-  if event.keyCode is 13
-    App.room.speak event.target.value
-    event.target.value = ""
-    event.preventDefault()
+
+# $(document).on "keypress", "[data-behavior~=room_speaker]",(event) ->
+#   if event.keyCode is 13
+#     App.room.speak event.target.value
+#     event.target.value = ""
+#     event.preventDefault()
