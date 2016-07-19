@@ -1,7 +1,7 @@
 h1 Chat room
 ul.list-group
-  li.list-group-item v-for="message in messages"
-    = "{{message.content}}"
+  li.list-group-item v-for="message in messages | limitBy 5" transition="item"
+    ="{{message.content}}"
     i.fa.fa-2x.fa-times.delete-button @click="remove(message.id)"
 
 label Say something:
