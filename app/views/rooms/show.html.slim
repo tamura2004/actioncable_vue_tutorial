@@ -1,6 +1,6 @@
 h1 Chat room
 ul.list-group
-  li.list-group-item v-for="message in messages" v-text="message.content"
+  li.list-group-item v-for="message in messages | limitBy 5" v-text="message.content" transition="item" 
 
 label Say something:
 input type="text" @keydown.enter.prevent="speak"
