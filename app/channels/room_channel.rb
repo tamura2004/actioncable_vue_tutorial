@@ -11,4 +11,8 @@ class RoomChannel < ApplicationCable::Channel
   def speak(data)
     Message.create! content: data['message']
   end
+
+  def remove(data)
+    Message.find(data["id"]).destroy
+  end
 end

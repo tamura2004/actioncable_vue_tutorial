@@ -1,6 +1,8 @@
 h1 Chat room
 ul.list-group
-  li.list-group-item v-for="message in messages" v-text="message.content"
+  li.list-group-item v-for="message in messages"
+    = "{{message.content}}"
+    i.fa.fa-2x.fa-times.delete-button @click="remove(message.id)"
 
 label Say something:
 input type="text" @keydown.enter.prevent="speak"
