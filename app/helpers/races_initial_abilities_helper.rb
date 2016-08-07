@@ -1,0 +1,2 @@
+module RacesInitialAbilitiesHelper
+end

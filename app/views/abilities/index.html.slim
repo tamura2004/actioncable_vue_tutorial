@@ -1,0 +1,10 @@
+ol.breadcrumb
+  li
+    = link_to "ホーム", root_path
+  li
+    = link_to "データ", root_path
+  li.active 能力値
+
+#abilities
+coffee:
+  $ -> VueFactory.create "abilities"

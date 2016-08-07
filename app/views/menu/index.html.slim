@@ -1,0 +1,56 @@
+link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"
+script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"
+
+div data-role="page" id="home"
+  div data-role="header" data-position="fixed"
+    h1 闇魂
+
+  div data-role="content"
+    ul data-role="listview"
+      li
+        a href="#home"
+          = image_tag "face01.png"
+          h3 ダンゾウ
+          p エルフ/忍者 HT30/AC40/hp120
+          p 筋18/敏14/耐16/知7/信7/魅5
+    ul data-role="listview"
+      li
+        a href="#home"
+          = image_tag "face01.png"
+          h3 ダンゾウ
+          p エルフ/忍者 HT30/AC40/hp120
+          p 筋18/敏14/耐16/知7/信7/魅5
+    ul data-role="listview"
+      li
+        a href="#home"
+          = image_tag "face01.png"
+          h3 ダンゾウ
+          p エルフ/忍者 HT30/AC40/hp120
+          p 筋18/敏14/耐16/知7/信7/魅5
+
+      ul data-role="listview"
+        li
+          a href="#menu" 赤いページ
+          span.ui-li-count 23
+        li
+          a href="#menu" 青いページ
+        li
+          a href="#menu" 黄色いページ
+
+  div data-role="footer" data-position="fixed"
+    h4 Copyright 2012
+
+div data-role="page" id="menu" data-add-back-btn="true"
+  div data-role="header" data-position="fixed"
+    h1 メニュー
+
+  div data-role="content"
+    p いろいろです。
+    p: a href="#home" ホーム
+    p: a href="#menu" メニュー
+
+  div data-role="footer" data-position="fixed"
+    h4 Copyright 2012
+
+
+

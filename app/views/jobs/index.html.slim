@@ -1,0 +1,10 @@
+ol.breadcrumb
+  li
+    = link_to "ホーム", root_path
+  li
+    = link_to "データ", root_path
+  li.active 職業
+
+#jobs
+coffee:
+  $ -> VueFactory.create "jobs"

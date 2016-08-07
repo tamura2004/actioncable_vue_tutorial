@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Race:
+  = @races_initial_ability.race
+p
+  strong Ability:
+  = @races_initial_ability.ability
+p
+  strong Value:
+  = @races_initial_ability.value
+
+= link_to 'Edit', edit_races_initial_ability_path(@races_initial_ability)
+'|
+= link_to 'Back', races_initial_abilities_path

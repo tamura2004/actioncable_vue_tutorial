@@ -1,0 +1,18 @@
+= form_for @races_initial_ability do |f|
+  - if @races_initial_ability.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@races_initial_ability.errors.count, "error")} prohibited this races_initial_ability from being saved:"
+      ul
+        - @races_initial_ability.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :race
+    = f.text_field :race
+  .field
+    = f.label :ability
+    = f.text_field :ability
+  .field
+    = f.label :value
+    = f.text_field :value
+  .actions = f.submit

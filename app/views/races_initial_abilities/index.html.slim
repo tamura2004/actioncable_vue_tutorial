@@ -1,0 +1,12 @@
+ol.breadcrumb
+  li
+    = link_to "ホーム", root_path
+  li
+    = link_to "チャート", root_path
+  li
+    = link_to "種族", races_path
+  li.active 能力値決定表
+
+#races_initial_abilities
+coffee:
+  $ -> VueFactory.create "races_initial_abilities"

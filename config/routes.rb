@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
+  resources :jobs
+  resources :races_initial_abilities
+  resources :races
+  resources :abilities
+  get 'menu/index'
+  root to: 'menu#index'
   resources :messages
-  root to: 'rooms#show'
-
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
