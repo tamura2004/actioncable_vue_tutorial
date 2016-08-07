@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'menu/index'
+
   resources :messages, only: :index
   root to: 'rooms#show'
 
