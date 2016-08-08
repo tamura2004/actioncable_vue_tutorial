@@ -1,56 +1,169 @@
 link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"
 script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"
 
-div data-role="page" id="home"
+/ タウンメニュー
+div data-role="page" id="town"
   div data-role="header" data-position="fixed"
-    h1 闇魂
+    h1 TWIZ
 
   div data-role="content"
     ul data-role="listview"
-      li
-        a href="#home"
-          = image_tag "face01.png"
-          h3 ダンゾウ
-          p エルフ/忍者 HT30/AC40/hp120
-          p 筋18/敏14/耐16/知7/信7/魅5
-    ul data-role="listview"
-      li
-        a href="#home"
-          = image_tag "face01.png"
-          h3 ダンゾウ
-          p エルフ/忍者 HT30/AC40/hp120
-          p 筋18/敏14/耐16/知7/信7/魅5
-    ul data-role="listview"
-      li
-        a href="#home"
-          = image_tag "face01.png"
-          h3 ダンゾウ
-          p エルフ/忍者 HT30/AC40/hp120
-          p 筋18/敏14/耐16/知7/信7/魅5
-
-      ul data-role="listview"
-        li
-          a href="#menu" 赤いページ
-          span.ui-li-count 23
-        li
-          a href="#menu" 青いページ
-        li
-          a href="#menu" 黄色いページ
+      li data-role="list-divider" リルガミン城
+      li: a href="#tavern" data-transition="slide" ギルガメッシュの酒場
+      li: a href="#tavern" 冒険者の宿
+      li: a href="#tavern" ボルタック商店
+      li: a href="#tavern" カント寺院
+      li: a href="#wilderness" 街外れ
+      = render partial: "party"
 
   div data-role="footer" data-position="fixed"
     h4 Copyright 2012
 
-div data-role="page" id="menu" data-add-back-btn="true"
-  div data-role="header" data-position="fixed"
-    h1 メニュー
+/ 酒場
+div data-role="page" id="tavern"
+  div data-role="header" data-position="fixed" data-add-back-btn="true"
+    h1 TWIZ
 
   div data-role="content"
-    p いろいろです。
-    p: a href="#home" ホーム
-    p: a href="#menu" メニュー
+    ul data-role="listview"
+      li data-role="list-divider" ギルガメッシュの酒場
+      li: a href="#tavern_add" パーティに加える
+      li: a href="#tavern_remove" パーティから外す
+      li: a href="#tavern_status" ステータスを見る
+      li: a href="#tavern_share" お金を山分けする
+      li: a href="#town" 酒場を出る
+      = render partial: "party"
 
   div data-role="footer" data-position="fixed"
     h4 Copyright 2012
+
+/ 酒場 - キャラクターを選択
+div data-role="page" id="tavern_add"
+  div data-role="header" data-position="fixed" data-add-back-btn="true"
+    h1 TWIZ
+
+  div data-role="content"
+    ul data-role="listview"
+      li data-role="list-divider" キャラクターを選択
+      li: a href="#tavern" アベル 人間/戦士 AC30/hp24/毒
+      li: a href="#tavern" アベル 人間/戦士 AC30/hp24/毒
+      li: a href="#tavern" アベル 人間/戦士 AC30/hp24/毒
+      li: a href="#tavern" アベル 人間/戦士 AC30/hp24/毒
+      = render partial: "party"
+
+  div data-role="footer" data-position="fixed"
+    h4 Copyright 2012
+
+/ 宿屋
+div data-role="page" id="inn"
+  div data-role="header" data-position="fixed" data-add-back-btn="true"
+    h1 TWIZ
+
+  div data-role="content"
+    ul data-role="listview"
+      li data-role="list-divider" キャラクターを選択
+      li: a href="#inn" 馬小屋
+      li: a href="#inn" 簡易寝台
+      li: a href="#inn" エコノミー
+      li: a href="#inn" スイートルーム
+      li: a href="#inn" ロイヤルスイート
+      li: a href="#town" 戻る
+      = render partial: "party"
+
+  div data-role="footer" data-position="fixed"
+    h4 Copyright 2012
+
+/ 商店
+div data-role="page" id="shop"
+  div data-role="header" data-position="fixed" data-add-back-btn="true"
+    h1 TWIZ
+
+  div data-role="content"
+    ul data-role="listview"
+      li data-role="list-divider" ボルタック商店
+      li: a href="#shop_buy" アイテムを買う
+      li: a href="#shop" アイテムを売る
+      li: a href="#shop" 呪いを解く
+      li: a href="#shop" アイテムを識別する
+      li: a href="#town" 戻る
+      = render partial: "party"
+
+  div data-role="footer" data-position="fixed"
+    h4 Copyright 2012
+
+/ 町外れ
+div data-role="page" id="wilderness"
+  div data-role="header" data-position="fixed" data-add-back-btn="true"
+    h1 TWIZ
+
+  div data-role="content"
+    ul data-role="listview"
+      li data-role="list-divider" 街外れ
+      li: a href="#training" 訓練場へ行く
+      li: a href="#camp" 地下迷宮に入る
+      li: a href="#restart" 冒険を再開する
+      li: a href="#town" 城に戻る
+      = render partial: "party"
+
+  div data-role="footer" data-position="fixed"
+    h4 Copyright 2012
+
+/ キャンプ
+div data-role="page" id="camp"
+  div data-role="header" data-position="fixed" data-add-back-btn="true"
+    h1 TWIZ
+
+  div data-role="content"
+    ul data-role="listview"
+      li data-role="list-divider" キャンプ
+      li: a href="#training" ステータスを見る
+      li: a href="#camp" 他のパーティを探す
+      li: a href="#restart" メンバーを並び替える
+      li: a href="#maze" 外に出る
+      = render partial: "party"
+
+  div data-role="footer" data-position="fixed"
+    h4 Copyright 2012
+
+/ 迷宮
+div data-role="page" id="maze"
+  div data-role="header" data-position="fixed" data-add-back-btn="true"
+    h1 TWIZ
+
+  div data-role="content"
+    ul data-role="listview"
+      li data-role="list-divider" 第一階層
+      li: a href="#battle" エンカウンターへ
+      = render partial: "party"
+
+  div data-role="footer" data-position="fixed"
+    h4 Copyright 2012
+
+/ 戦闘
+div data-role="page" id="battle"
+  div data-role="header" data-position="fixed" data-add-back-btn="true"
+    h1 TWIZ
+
+  div data-role="content"
+    ul data-role="listview"
+      li data-role="list-divider" モンスター
+      li: a href="#battle" バブリースライム
+      li: a href="#battle" スケルトン
+
+      li data-role="list-divider" アクション
+
+      div data-role="controlgroup" data-type="horizontal"
+        a href="#battle" data-role="button" 戦う
+        a href="#battle" data-role="button" 防御
+        a href="#battle" data-role="button" 呪文
+        a href="#battle" data-role="button" 道具
+        a href="#battle" data-role="button" 逃走
+
+      = render partial: "party"
+
+  div data-role="footer" data-position="fixed"
+    h4 Copyright 2012
+
 
 
 

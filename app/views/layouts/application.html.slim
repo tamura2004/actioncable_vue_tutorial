@@ -13,8 +13,13 @@ html lang="en"
   body
     = nav_bar fixed: :top, brand: "闇魂", responsice: true
       = menu_group
-        = drop_down "データ管理"
-          = menu_item "種族", root_path
+        = menu_item "モバイル画面", menu_index_path
+        = drop_down "データ"
+          = menu_item "種族", races_path
+          = menu_item "能力値", abilities_path
+        = drop_down "チャート"
+          = menu_item "種族能力初期値", races_initial_abilities_path
+          = menu_item "能力値", abilities_path
           / = menu_item "職業", jobs_path
           / = menu_item "武器", weapons_path
           / = menu_item "防具", armors_path
