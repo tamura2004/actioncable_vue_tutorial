@@ -1,28 +1,43 @@
 link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"
 script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"
 
-/ タウンメニュー
-div data-role="page" id="town"
-  div data-role="header" data-position="fixed"
-    h1 TWIZ
+/ タイトル
+div data-role="page" id="top" data-theme="b"
+  div data-role="content"
+    = image_tag "title.png", class: "img-responsive"
+    ul data-role="listview" data-inset="true"
+      li: a href="#races" 初めから
+      li: a href="#tavern" 続きから
+      li: a href="#tavern" ゲームを終了する
+
+/ キャラクター作成
+div data-role="page" id="races" data-theme="b"
+  div data-role="header" data-position="fixed" data-add-back-btn="true"
+    h1 種族を選んで下さい
 
   div data-role="content"
-    ul data-role="listview"
-      li data-role="list-divider" リルガミン城
-      li: a href="#tavern" data-transition="slide" ギルガメッシュの酒場
-      li: a href="#tavern" 冒険者の宿
-      li: a href="#tavern" ボルタック商店
-      li: a href="#tavern" カント寺院
-      li: a href="#wilderness" 街外れ
-      = render partial: "party"
+    ul data-role="listview" data-inset="true"
+      - @races.each do |race|
+        li: a href="#jobs"
+          h3 = race.name
+          p = race.rolled_abilities
 
-  div data-role="footer" data-position="fixed"
-    h4 Copyright 2012
+/ キャラクター作成
+div data-role="page" id="jobs" data-theme="b"
+  div data-role="header" data-position="fixed" data-add-back-btn="true"
+    h1 職業を選んで下さい
+
+  div data-role="content"
+    ul data-role="listview" data-inset="true"
+      - @jobs.each do |job|
+        li: a href="#tavern"
+          h3 = job.name
+          p = job.rolled_abilities
 
 / 酒場
 div data-role="page" id="tavern"
   div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 TWIZ
+    h1 Twilight TRPG Tool
 
   div data-role="content"
     ul data-role="listview"
@@ -40,7 +55,7 @@ div data-role="page" id="tavern"
 / 酒場 - キャラクターを選択
 div data-role="page" id="tavern_add"
   div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 TWIZ
+    h1 Twilight TRPG Tool
 
   div data-role="content"
     ul data-role="listview"
@@ -57,7 +72,7 @@ div data-role="page" id="tavern_add"
 / 宿屋
 div data-role="page" id="inn"
   div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 TWIZ
+    h1 Twilight TRPG Tool
 
   div data-role="content"
     ul data-role="listview"
@@ -76,7 +91,7 @@ div data-role="page" id="inn"
 / 商店
 div data-role="page" id="shop"
   div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 TWIZ
+    h1 Twilight TRPG Tool
 
   div data-role="content"
     ul data-role="listview"
@@ -94,7 +109,7 @@ div data-role="page" id="shop"
 / 町外れ
 div data-role="page" id="wilderness"
   div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 TWIZ
+    h1 Twilight TRPG Tool
 
   div data-role="content"
     ul data-role="listview"
@@ -111,7 +126,7 @@ div data-role="page" id="wilderness"
 / キャンプ
 div data-role="page" id="camp"
   div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 TWIZ
+    h1 Twilight TRPG Tool
 
   div data-role="content"
     ul data-role="listview"
@@ -128,7 +143,7 @@ div data-role="page" id="camp"
 / 迷宮
 div data-role="page" id="maze"
   div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 TWIZ
+    h1 Twilight TRPG Tool
 
   div data-role="content"
     ul data-role="listview"
@@ -142,7 +157,7 @@ div data-role="page" id="maze"
 / 戦闘
 div data-role="page" id="battle"
   div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 TWIZ
+    h1 Twilight TRPG Tool
 
   div data-role="content"
     ul data-role="listview"

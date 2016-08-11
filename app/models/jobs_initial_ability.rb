@@ -1,5 +1,5 @@
-class RacesInitialAbility < ApplicationRecord
-  belongs_to :race
+class JobsInitialAbility < ApplicationRecord
+  belongs_to :job
   belongs_to :ability
 
   def rolled_ability

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160807121100) do
+ActiveRecord::Schema.define(version: 20160811122239) do
 
   create_table "abilities", force: :cascade do |t|
     t.string   "name"
@@ -20,8 +20,19 @@ ActiveRecord::Schema.define(version: 20160807121100) do
 
   create_table "jobs", force: :cascade do |t|
     t.string   "name"
+    t.string   "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "jobs_initial_abilities", force: :cascade do |t|
+    t.integer  "job_id"
+    t.integer  "ability_id"
+    t.string   "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ability_id"], name: "index_jobs_initial_abilities_on_ability_id"
+    t.index ["job_id"], name: "index_jobs_initial_abilities_on_job_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -32,6 +43,7 @@ ActiveRecord::Schema.define(version: 20160807121100) do
 
   create_table "races", force: :cascade do |t|
     t.string   "name"
+    t.string   "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
