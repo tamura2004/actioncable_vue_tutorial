@@ -10,7 +10,7 @@ class RacesInitialAbilitiesController < ApplicationController
       result["id"] = race.id
       result["name"] = race.name
 
-      race.races_initial_abilities.each do |init|
+      race.initial_abilities.each do |init|
         result[init.ability.name] = init.value
       end
       results << result
@@ -74,7 +74,7 @@ class RacesInitialAbilitiesController < ApplicationController
     error = false
     races_initial_ability_params.each do |ability_name,value|
       @ability = Ability.find_by(name: ability_name)
-      @init = @race.races_initial_abilities.find_by(ability: @ability)
+      @init = @race.initial_abilities.find_by(ability: @ability)
       if @init
         if value.size > 0
           @init.value = value

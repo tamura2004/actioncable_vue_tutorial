@@ -2,6 +2,8 @@ class RacesInitialAbility < ApplicationRecord
   belongs_to :race
   belongs_to :ability
 
+  delegate :name, to: :ability
+
   def rolled_ability
     "#{ability.name}：#{roll}"
   end

@@ -1,3 +1,33 @@
+coffee:
+  $(document).on "pagebeforecreate", (e,d) ->
+    new Vue
+      el: "body"
+      data:
+        races: gon.races
+        jobs: gon.jobs
+        pc:
+          race: null
+          job: null
+          abilities: []
+
+      methods:
+        hello: -> alert "hello"
+        diceLabel: (race) -> race.initialAbilities.map((a) -> "#{a.name}：#{a.value}d6+#{8 - a.value}").join(" / ")
+        abilityLabel: -> @pc.abilities.map((a) -> "#{a.name}：#{a.value}").join(" / ")
+        setRace: (race) ->
+          @pc.race = race
+          @rollDice()
+
+        setJob: (job) -> @pc.job = job
+
+        rollDice: ->
+          @pc.abilities = @pc.race.initialAbilities.map (a) =>
+            id: a.id
+            name: a.name
+            value: @d6(a.value) + 8 - a.value
+
+        d6: (n) -> (Math.floor(Math.random()*6+1) for i in [1..n]).reduce((a,b)->a+b)
+
 link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"
 script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"
 
@@ -8,49 +38,104 @@ div data-role="page" id="top" data-theme="b"
     ul data-role="listview" data-inset="true"
       li: a href="#races" 初めから
       li: a href="#tavern" 続きから
-      li: a href="#tavern" ゲームを終了する
+      li: a @click.prevent="hello" ゲームを終了する
 
-/ キャラクター作成
+/ キャラクター作成　種族選択
 div data-role="page" id="races" data-theme="b"
   div data-role="header" data-position="fixed" data-add-back-btn="true"
     h1 種族を選んで下さい
 
   div data-role="content"
     ul data-role="listview" data-inset="true"
-      - @races.each do |race|
-        li: a href="#jobs"
-          h3 = race.name
-          p = race.rolled_abilities
+      li data-role="list-divider" 種族
+      li v-for="race in races"
+        a href="#roll_dice" @click="setRace(race)"
+          h3 v-text="race.name"
+          p v-text="diceLabel(race)"
 
-/ キャラクター作成
+/ キャラクター作成　能力値決定
+div data-role="page" id="roll_dice" data-theme="b"
+  div data-role="header" data-position="fixed" data-add-back-btn="true"
+    h1 能力値を決定して下さい
+
+  div data-role="content"
+    ul data-role="listview" data-inset="true"
+
+      li data-role="list-divider" 種族
+      li: h3 v-text="pc.race.name"
+
+      li data-role="list-divider" 能力値
+      li: h3 v-text="abilityLabel()"
+
+    div data-role="controlgroup" data-type="horizontal"
+      a href="#" data-role="button" data-icon="refresh" @click.prevent="rollDice" 振り直す
+      a href="#jobs" data-role="button" data-icon="check" 決定
+
+/ キャラクター作成　クラス決定
 div data-role="page" id="jobs" data-theme="b"
   div data-role="header" data-position="fixed" data-add-back-btn="true"
     h1 職業を選んで下さい
 
   div data-role="content"
     ul data-role="listview" data-inset="true"
-      - @jobs.each do |job|
-        li: a href="#tavern"
-          h3 = job.name
-          p = job.rolled_abilities
+
+      li data-role="list-divider" 種族
+      li: h3 v-text="pc.race.name"
+
+      li data-role="list-divider" 能力値
+      li: h3 v-text="abilityLabel()"
+
+      li data-role="list-divider" 職業
+      li v-for="job in jobs"
+        a href="#confirm" @click="setJob(job)"
+          h3 v-text="job.name"
+
+/ キャラクター作成　確認
+div data-role="page" id="confirm" data-theme="b"
+  div data-role="header" data-position="fixed" data-add-back-btn="true"
+    h1 冒険を始めますか
+
+  div data-role="content"
+    ul data-role="listview" data-inset="true"
+
+      li data-role="list-divider" 種族
+      li: h3 v-text="pc.race.name"
+
+      li data-role="list-divider" 能力値
+      li: h3 v-text="abilityLabel()"
+
+      li data-role="list-divider" 職業
+      li: h3 v-text="pc.job.name"
+
+    div data-role="controlgroup" data-type="horizontal"
+      a href="#tavern" data-role="button" data-icon="check" 始める
 
 / 酒場
-div data-role="page" id="tavern"
+div data-role="page" id="tavern" data-theme="b"
   div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 Twilight TRPG Tool
+    h1 始まりの村
 
   div data-role="content"
     ul data-role="listview"
-      li data-role="list-divider" ギルガメッシュの酒場
-      li: a href="#tavern_add" パーティに加える
-      li: a href="#tavern_remove" パーティから外す
-      li: a href="#tavern_status" ステータスを見る
-      li: a href="#tavern_share" お金を山分けする
-      li: a href="#town" 酒場を出る
-      = render partial: "party"
+      li data-role="list-divider" 移動
 
-  div data-role="footer" data-position="fixed"
-    h4 Copyright 2012
+      div data-role="controlgroup"
+        .ui-grid-a
+          .ui-block-a
+            a href="#" data-role="button" data-icon="navigation" 村長の家
+            a href="#" data-role="button" data-icon="navigation" 武器屋
+            a href="#" data-role="button" data-icon="navigation" 防具屋
+            a href="#" data-role="button" data-icon="navigation" 宿屋
+          .ui-block-b
+            a href="#" data-role="button" data-icon="navigation" 冒険者ギルド
+            a href="#" data-role="button" data-icon="navigation" 酒場
+            a href="#" data-role="button" data-icon="navigation" 裏通り
+            a href="#" data-role="button" data-icon="navigation" 村の門
+
+      li data-role="list-divider" あなた
+      li
+        h3 v-text="pc.race.name + '/' + pc.job.name"
+        p v-text="abilityLabel()"
 
 / 酒場 - キャラクターを選択
 div data-role="page" id="tavern_add"
