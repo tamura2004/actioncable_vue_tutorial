@@ -35,7 +35,7 @@ class MenuController < ApplicationController
       :select_5=>"ギルド",
       :select_6=>"酒場",
       :select_7=>"裏通り",
-      :select_8=>"街の門",
+      :select_8=>"村の門",
       :message_1=>"暗い・・・",
       :message_2=>"とても暗い村だ。",
       :message_3=>"　　",
