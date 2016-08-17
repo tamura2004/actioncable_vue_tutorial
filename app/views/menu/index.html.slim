@@ -9,9 +9,11 @@ coffee:
           race: null
           job: null
           abilities: []
+        name: "最初の村"
+        menus: gon.menus
+        menu: gon.menus[0]
 
       methods:
-        hello: -> alert "hello"
         diceLabel: (race) -> race.initialAbilities.map((a) -> "#{a.name}：#{a.value}d6+#{8 - a.value}").join(" / ")
         abilityLabel: -> @pc.abilities.map((a) -> "#{a.name}：#{a.value}").join(" / ")
         setRace: (race) ->
@@ -28,6 +30,125 @@ coffee:
 
         d6: (n) -> (Math.floor(Math.random()*6+1) for i in [1..n]).reduce((a,b)->a+b)
 
+        goto_place: (next_menu) ->
+          @menu = @menus.find (menu) -> menu.name is @menu.place
+          @menu.message_1 = next_menu.message_1
+          @menu.message_2 = next_menu.message_2
+          @menu.message_3 = next_menu.message_3
+          @menu.message_4 = next_menu.message_4
+
+        action: (i) ->
+          @name = "最初の村"
+          switch i
+            when 1
+              @name = @menu.select_1
+            when 2
+              @name = @menu.select_2
+            when 3
+              @name = @menu.select_3
+            when 4
+              @name = @menu.select_4
+            when 5
+              @name = @menu.select_5
+            when 6
+              @name = @menu.select_6
+            when 7
+              @name = @menu.select_7
+            when 8
+              @name = @menu.select_8
+
+          next_menu = @menus.find (menu) => menu.name is @name
+          console.log next_menu
+
+          switch next_menu.action
+            when "場所"
+              @menu = next_menu
+            when "店"
+              @menu = next_menu
+            when "アイテム"
+              @menu = next_menu
+            when "決定"
+              @menu = next_menu
+            else
+              switch @menu.place
+                when "武器屋"
+                  switch name
+                    when "買う"
+                      @goto_place(next_menu)
+                    when "やめとく"
+                      @goto_place(next_menu)
+                    when "出る"
+                      @menu = @menus.find (menu) => menu.name is @menu.area
+
+                when "防具屋"
+                  switch name
+                    when "買う"
+                      @goto_place(next_menu)
+                    when "やめとく"
+                      @goto_place(next_menu)
+                    when "出る"
+                      @menu = @menus.find (menu) => menu.name is @menu.area
+
+                when "宿屋"
+                  switch name
+                    when "宿泊する"
+                      @menu = @menus.find (menu) => menu.name is @menu.area
+                    when "やめとく"
+                      @menu = @menus.find (menu) => menu.name is @menu.area
+                    when "無断宿泊する"
+                      @menu = @menus.find (menu) => menu.name is @menu.area
+
+                when "ギルド"
+                  switch name
+                    when "働く"
+                      @goto_place(next_menu)
+                    when "やめとく"
+                      @goto_place(next_menu)
+                    when "次へ"
+                      @goto_place(next_menu)
+
+                when "酒場"
+                  switch name
+                    when "飲む"
+                      @goto_place(next_menu)
+                    when "飲まない"
+                      @goto_place(next_menu)
+                    when "やる"
+                      @menu = next_menu
+                    when "やめとく"
+                      @goto_place(next_menu)
+                    when "覚悟したぜ"
+                      @menu = next_menu
+                    when "ちょっとまて"
+                      @goto_place(next_menu)
+                    when "コインを投げる"
+                      @menu = next_menu
+                    when "構える"
+                      @menu = next_menu
+                    when "引き金を引く"
+                      @menu = next_menu
+                    when "そうだ"
+                      @menu = next_menu
+                    when "待つ"
+                      @menu = next_menu
+                    when "勝った・・・"
+                      @goto_place(next_menu)
+
+                when "裏通り"
+                  switch name
+                    when "ゴミをあさる"
+                      @goto_place(next_menu)
+                    when "盗みに入る"
+                      @goto_place(next_menu)
+                    when "村に戻る"
+                      @menu = @menus.find (menu) => menu.name is @menu.area
+
+                when "村の門"
+                  switch name
+                    when "村に戻る"
+                      @menu = @menus.find (menu) => menu.name is @menu.area
+
+
 link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"
 script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"
 
@@ -37,8 +158,8 @@ div data-role="page" id="top" data-theme="b"
     = image_tag "title.png", class: "img-responsive"
     ul data-role="listview" data-inset="true"
       li: a href="#races" 初めから
-      li: a href="#tavern" 続きから
-      li: a @click.prevent="hello" ゲームを終了する
+      li: a href="#races" 続きから
+      li: a href="#races" ゲームを終了する
 
 / キャラクター作成　種族選択
 div data-role="page" id="races" data-theme="b"
@@ -108,162 +229,38 @@ div data-role="page" id="confirm" data-theme="b"
       li: h3 v-text="pc.job.name"
 
     div data-role="controlgroup" data-type="horizontal"
-      a href="#tavern" data-role="button" data-icon="check" 始める
+      a href="#main" data-role="button" data-icon="check" 始める
 
-/ 酒場
-div data-role="page" id="tavern" data-theme="b"
-  div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 始まりの村
+/ 村
+div data-role="page" id="main" data-theme="b"
+  div data-role="header" data-position="fixed"
+    h1 v-text="menu.name"
 
   div data-role="content"
     ul data-role="listview"
-      li data-role="list-divider" 移動
 
+      li data-role="list-divider" メッセージ
+      li
+        h3 v-text="menu.message_1"
+        h3 v-text="menu.message_2"
+        h3 v-text="menu.message_3"
+        h3 v-text="menu.message_4"
+
+      li data-role="list-divider" アクション
       div data-role="controlgroup"
         .ui-grid-a
           .ui-block-a
-            a href="#" data-role="button" data-icon="navigation" 村長の家
-            a href="#" data-role="button" data-icon="navigation" 武器屋
-            a href="#" data-role="button" data-icon="navigation" 防具屋
-            a href="#" data-role="button" data-icon="navigation" 宿屋
+            button.ui-btn @click="action(1)" v-text="menu.select_1"
+            button.ui-btn @click="action(2)" v-text="menu.select_2"
+            button.ui-btn @click="action(3)" v-text="menu.select_3"
+            button.ui-btn @click="action(4)" v-text="menu.select_4"
           .ui-block-b
-            a href="#" data-role="button" data-icon="navigation" 冒険者ギルド
-            a href="#" data-role="button" data-icon="navigation" 酒場
-            a href="#" data-role="button" data-icon="navigation" 裏通り
-            a href="#" data-role="button" data-icon="navigation" 村の門
+            button.ui-btn @click="action(5)" v-text="menu.select_5"
+            button.ui-btn @click="action(6)" v-text="menu.select_6"
+            button.ui-btn @click="action(7)" v-text="menu.select_7"
+            button.ui-btn @click="action(8)" v-text="menu.select_8"
 
-      li data-role="list-divider" あなた
+      li data-role="list-divider" お前
       li
         h3 v-text="pc.race.name + '/' + pc.job.name"
         p v-text="abilityLabel()"
-
-/ 酒場 - キャラクターを選択
-div data-role="page" id="tavern_add"
-  div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 Twilight TRPG Tool
-
-  div data-role="content"
-    ul data-role="listview"
-      li data-role="list-divider" キャラクターを選択
-      li: a href="#tavern" アベル 人間/戦士 AC30/hp24/毒
-      li: a href="#tavern" アベル 人間/戦士 AC30/hp24/毒
-      li: a href="#tavern" アベル 人間/戦士 AC30/hp24/毒
-      li: a href="#tavern" アベル 人間/戦士 AC30/hp24/毒
-      = render partial: "party"
-
-  div data-role="footer" data-position="fixed"
-    h4 Copyright 2012
-
-/ 宿屋
-div data-role="page" id="inn"
-  div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 Twilight TRPG Tool
-
-  div data-role="content"
-    ul data-role="listview"
-      li data-role="list-divider" キャラクターを選択
-      li: a href="#inn" 馬小屋
-      li: a href="#inn" 簡易寝台
-      li: a href="#inn" エコノミー
-      li: a href="#inn" スイートルーム
-      li: a href="#inn" ロイヤルスイート
-      li: a href="#town" 戻る
-      = render partial: "party"
-
-  div data-role="footer" data-position="fixed"
-    h4 Copyright 2012
-
-/ 商店
-div data-role="page" id="shop"
-  div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 Twilight TRPG Tool
-
-  div data-role="content"
-    ul data-role="listview"
-      li data-role="list-divider" ボルタック商店
-      li: a href="#shop_buy" アイテムを買う
-      li: a href="#shop" アイテムを売る
-      li: a href="#shop" 呪いを解く
-      li: a href="#shop" アイテムを識別する
-      li: a href="#town" 戻る
-      = render partial: "party"
-
-  div data-role="footer" data-position="fixed"
-    h4 Copyright 2012
-
-/ 町外れ
-div data-role="page" id="wilderness"
-  div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 Twilight TRPG Tool
-
-  div data-role="content"
-    ul data-role="listview"
-      li data-role="list-divider" 街外れ
-      li: a href="#training" 訓練場へ行く
-      li: a href="#camp" 地下迷宮に入る
-      li: a href="#restart" 冒険を再開する
-      li: a href="#town" 城に戻る
-      = render partial: "party"
-
-  div data-role="footer" data-position="fixed"
-    h4 Copyright 2012
-
-/ キャンプ
-div data-role="page" id="camp"
-  div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 Twilight TRPG Tool
-
-  div data-role="content"
-    ul data-role="listview"
-      li data-role="list-divider" キャンプ
-      li: a href="#training" ステータスを見る
-      li: a href="#camp" 他のパーティを探す
-      li: a href="#restart" メンバーを並び替える
-      li: a href="#maze" 外に出る
-      = render partial: "party"
-
-  div data-role="footer" data-position="fixed"
-    h4 Copyright 2012
-
-/ 迷宮
-div data-role="page" id="maze"
-  div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 Twilight TRPG Tool
-
-  div data-role="content"
-    ul data-role="listview"
-      li data-role="list-divider" 第一階層
-      li: a href="#battle" エンカウンターへ
-      = render partial: "party"
-
-  div data-role="footer" data-position="fixed"
-    h4 Copyright 2012
-
-/ 戦闘
-div data-role="page" id="battle"
-  div data-role="header" data-position="fixed" data-add-back-btn="true"
-    h1 Twilight TRPG Tool
-
-  div data-role="content"
-    ul data-role="listview"
-      li data-role="list-divider" モンスター
-      li: a href="#battle" バブリースライム
-      li: a href="#battle" スケルトン
-
-      li data-role="list-divider" アクション
-
-      div data-role="controlgroup" data-type="horizontal"
-        a href="#battle" data-role="button" 戦う
-        a href="#battle" data-role="button" 防御
-        a href="#battle" data-role="button" 呪文
-        a href="#battle" data-role="button" 道具
-        a href="#battle" data-role="button" 逃走
-
-      = render partial: "party"
-
-  div data-role="footer" data-position="fixed"
-    h4 Copyright 2012
-
-
-
-
