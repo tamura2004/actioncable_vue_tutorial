@@ -31,7 +31,7 @@ coffee:
         d6: (n) -> (Math.floor(Math.random()*6+1) for i in [1..n]).reduce((a,b)->a+b)
 
         goto_place: (next_menu) ->
-          @menu = @menus.find (menu) -> menu.name is @menu.place
+          @menu = @menus.find (menu) => menu.name is @menu.place
           @menu.message_1 = next_menu.message_1
           @menu.message_2 = next_menu.message_2
           @menu.message_3 = next_menu.message_3
@@ -58,7 +58,6 @@ coffee:
               @name = @menu.select_8
 
           next_menu = @menus.find (menu) => menu.name is @name
-          console.log next_menu
 
           switch next_menu.action
             when "場所"
@@ -68,8 +67,6 @@ coffee:
             when "アイテム"
               @menu = next_menu
             when "決定"
-              @menu = next_menu
-            else
               switch @menu.place
                 when "武器屋"
                   switch name
