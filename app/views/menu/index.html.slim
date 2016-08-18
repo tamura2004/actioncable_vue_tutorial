@@ -69,16 +69,17 @@ coffee:
             when "決定"
               switch @menu.place
                 when "武器屋"
-                  switch name
+                  switch next_menu.name
                     when "買う"
                       @goto_place(next_menu)
                     when "やめとく"
                       @goto_place(next_menu)
                     when "出る"
+                      console.log @
                       @menu = @menus.find (menu) => menu.name is @menu.area
 
                 when "防具屋"
-                  switch name
+                  switch next_menu.name
                     when "買う"
                       @goto_place(next_menu)
                     when "やめとく"
@@ -87,7 +88,7 @@ coffee:
                       @menu = @menus.find (menu) => menu.name is @menu.area
 
                 when "宿屋"
-                  switch name
+                  switch next_menu.name
                     when "宿泊する"
                       @menu = @menus.find (menu) => menu.name is @menu.area
                     when "やめとく"
@@ -96,16 +97,18 @@ coffee:
                       @menu = @menus.find (menu) => menu.name is @menu.area
 
                 when "ギルド"
-                  switch name
+                  switch next_menu.name
                     when "働く"
                       @goto_place(next_menu)
                     when "やめとく"
                       @goto_place(next_menu)
                     when "次へ"
                       @goto_place(next_menu)
+                    else
+                      @goto_place(next_menu)
 
                 when "酒場"
-                  switch name
+                  switch next_menu.name
                     when "飲む"
                       @goto_place(next_menu)
                     when "飲まない"
@@ -132,7 +135,7 @@ coffee:
                       @goto_place(next_menu)
 
                 when "裏通り"
-                  switch name
+                  switch next_menu.name
                     when "ゴミをあさる"
                       @goto_place(next_menu)
                     when "盗みに入る"
@@ -141,9 +144,13 @@ coffee:
                       @menu = @menus.find (menu) => menu.name is @menu.area
 
                 when "村の門"
-                  switch name
+                  switch next_menu.name
                     when "村に戻る"
                       @menu = @menus.find (menu) => menu.name is @menu.area
+
+                else
+                  @menu = @menus.find (menu) => menu.name is @menu.area
+
 
 
 link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"
@@ -152,7 +159,7 @@ script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"
 / タイトル
 div data-role="page" id="top" data-theme="b"
   div data-role="content"
-    = image_tag "title.png", class: "img-responsive"
+    / = image_tag "title.png", class: "img-responsive"
     ul data-role="listview" data-inset="true"
       li: a href="#races" 初めから
       li: a href="#races" 続きから
