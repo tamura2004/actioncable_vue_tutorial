@@ -29,16 +29,4 @@ class MenuController < ApplicationController
     gon.menus = table.map(&:to_h)
   end
 
-  def upload
-    file = params[:file].path.to_s
-    xlsx = Roo::Excelx.new(file)
-
-    xlsx.each_row_streaming do |row|
-      name,desc,id = row.map(&:value)
-      Word.create(name:name, desc:desc, user:user, removed:false)
-    end
-    redirect_to :words
-  end
-
-
 end
