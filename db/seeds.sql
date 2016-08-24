@@ -1,0 +1,15 @@
+INSERT INTO "pages" VALUES(1,'隙間の洞','祭壇','祭壇','place','魔女の家','滝つぼ','裂け目','','思い出す','','走る',NULL,NULL,NULL,NULL,NULL,'2016-08-24 12:16:32.053831','2016-08-24 13:14:23.495572');
+INSERT INTO "pages" VALUES(2,'隙間の洞','裂け目','裂け目','place','魔女の家','滝つぼ','祭壇','','飛び降りる','','',NULL,NULL,NULL,NULL,NULL,'2016-08-24 12:18:03.541155','2016-08-24 13:15:00.778227');
+INSERT INTO "pages" VALUES(3,'隙間の洞','裂け目','飛び降りる','death','','','','','','',NULL,NULL,NULL,'どこまでも落ちていく','そして、あなたは死んだ',NULL,'2016-08-24 12:19:28.673732','2016-08-24 13:18:57.298185');
+INSERT INTO "pages" VALUES(4,'隙間の洞','隙間の洞','滝つぼ','place','魔女の家','裂け目','祭壇','','飛び込む','','調べる',NULL,NULL,NULL,NULL,NULL,'2016-08-24 12:23:58.066324','2016-08-24 13:17:50.560056');
+INSERT INTO "pages" VALUES(5,'隙間の洞','滝つぼ','調べる','item','','','','','','',NULL,NULL,NULL,'ダガーを見つけた',NULL,NULL,'2016-08-24 12:24:30.974182','2016-08-24 13:18:43.768663');
+INSERT INTO "pages" VALUES(6,'隙間の洞','祭壇','思い出す','message','','','',NULL,'','',NULL,NULL,NULL,'何も思い出せない',NULL,NULL,'2016-08-24 12:31:22.584436','2016-08-24 13:15:17.640352');
+INSERT INTO "pages" VALUES(7,'隙間の洞','祭壇','走る','death','','','','','',NULL,NULL,NULL,NULL,'周囲は崖だった！','暗闇に投げ出されてあなたは死んだ！',NULL,'2016-08-24 12:32:21.436584','2016-08-24 13:15:24.462979');
+INSERT INTO "pages" VALUES(8,'隙間の洞','滝つぼ','飛び込む','death','','','','','',NULL,NULL,NULL,NULL,'ものすごい急流だ','息が苦しい','溺れてあなたは死んだ','2016-08-24 12:34:15.818495','2016-08-24 13:16:02.358666');
+INSERT INTO "pages" VALUES(9,'隙間の洞','魔女の家','魔女の家','place','長女と話す','次女と話す','三女と話す','','','二階を探す','裏口を出る',NULL,NULL,NULL,NULL,NULL,'2016-08-24 12:36:40.281258','2016-08-24 13:16:44.630604');
+INSERT INTO "pages" VALUES(10,'隙間の洞','魔女の家','長女と話す','message','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'まだあきらめられないのかい',NULL,NULL,'2016-08-24 12:39:33.999912','2016-08-24 13:13:51.998593');
+INSERT INTO "pages" VALUES(11,'隙間の洞','魔女の家','次女と話す','message','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'・・・',NULL,NULL,'2016-08-24 12:39:34.029109','2016-08-24 13:16:47.886758');
+INSERT INTO "pages" VALUES(12,'隙間の洞','魔女の家','三女と話す','message','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'・・・',NULL,NULL,'2016-08-24 12:39:34.155477','2016-08-24 13:17:09.351527');
+INSERT INTO "pages" VALUES(13,'隙間の洞','魔女の家','二階を探す','battle','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'スパイダーが現れた！',NULL,NULL,'2016-08-24 12:42:01.394784','2016-08-24 13:17:10.158593');
+INSERT INTO "pages" VALUES(14,'隙間の洞','魔女の家','裏口を出る','place','魔女の家','',NULL,NULL,NULL,'最初の村',NULL,NULL,NULL,NULL,NULL,NULL,'2016-08-24 12:42:05.709346','2016-08-24 13:50:13.896147');
+INSERT INTO "pages" VALUES(15,'最初の村','最初の村','最初の村','death','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'まだ世界が生成されていない！','虚無に吸い込まれてあなたは死んだ',NULL,'2016-08-24 12:45:08.263820','2016-08-24 13:12:40.743269');

@@ -1,0 +1,10 @@
+ol.breadcrumb
+  li
+    = link_to "ホーム", root_path
+  li
+    = link_to "チャート", root_path
+  li.active ページ
+
+#pages
+coffee:
+  $ -> VueFactory.create "pages"

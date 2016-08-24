@@ -1,0 +1,54 @@
+p#notice = notice
+
+p
+  strong Area:
+  = @page.area
+p
+  strong Place:
+  = @page.place
+p
+  strong Name:
+  = @page.name
+p
+  strong Info:
+  = @page.info
+p
+  strong Page 1:
+  = @page.page_1
+p
+  strong Page 2:
+  = @page.page_2
+p
+  strong Page 3:
+  = @page.page_3
+p
+  strong Page 4:
+  = @page.page_4
+p
+  strong Page 5:
+  = @page.page_5
+p
+  strong Page 6:
+  = @page.page_6
+p
+  strong Page 7:
+  = @page.page_7
+p
+  strong Page 8:
+  = @page.page_8
+p
+  strong Msg 1:
+  = @page.msg_1
+p
+  strong Msg 2:
+  = @page.msg_2
+p
+  strong Msg 3:
+  = @page.msg_3
+p
+  strong Msg 4:
+  = @page.msg_4
+
+= link_to 'Edit', edit_page_path(@page)
+'|
+= link_to 'Back', pages_path

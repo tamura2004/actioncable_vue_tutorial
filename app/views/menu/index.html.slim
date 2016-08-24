@@ -14,10 +14,10 @@ coffee:
           level: 1
 
         menus: gon.menus
-        menu: gon.menus[0]
+        menu: gon.menu
 
       computed:
-        hp: -> @pc.abilities[2] * @pc.level
+        hp: -> @pc.abilities.find((a)-> a.name is "耐久").value * @pc.level
 
       methods:
         diceLabel: (race) -> race.initialAbilities.map((a) -> "#{a.name}：#{a.value}d6+#{8 - a.value}").join(" / ")
@@ -38,15 +38,54 @@ coffee:
 
         d6: (n) -> (Math.floor(Math.random()*6+1) for i in [1..n]).reduce((a,b)->a+b)
 
-        action: (name) ->
-          next = @menus.find((menu)=>menu.place is name)
-          return unless next
+        setPage: (menu) ->
+          @menu.area = menu.area
+          @menu.place = menu.place
+          @menu.name = menu.name
+          @menu.info = menu.info
+          @menu.page_1 = menu.page_1
+          @menu.page_2 = menu.page_2
+          @menu.page_3 = menu.page_3
+          @menu.page_4 = menu.page_4
+          @menu.page_5 = menu.page_5
+          @menu.page_6 = menu.page_6
+          @menu.page_7 = menu.page_7
+          @menu.page_8 = menu.page_8
 
-          if next.type is "手動"
-            @menu = next
-          else
-            next = @menus.find((menu)=>menu.place is next.menu_1)
-            @menu = next
+        setMessage: (menu) ->
+          @menu.msg_1 = menu.msg_1
+          @menu.msg_2 = menu.msg_2
+          @menu.msg_3 = menu.msg_3
+          @menu.msg_4 = menu.msg_4
+
+        action: (name) ->
+          console.log "info"
+          console.log name
+          menu = @menus.find((menu)=>menu.name is name)
+          console.log menu.info
+          console.log "info"
+          unless menu
+            console.log "error"
+            console.log name
+
+          switch menu.info
+            when "place"
+              @setPage(menu)
+              @setMessage(menu)
+
+            when "death"
+              @setMessage(menu)
+              $('body').pagecontainer("change","#death")
+
+            when "message"
+              @setMessage(menu)
+
+            when "item"
+              @setMessage(menu)
+
+            when "battle"
+              @setMessage(menu)
+
 
 link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"
 script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"
@@ -59,6 +98,16 @@ div data-role="page" id="top" data-theme="b"
       li: a href="#races" 初めから
       li: a href="#races" 続きから
       li: a href="#races" ゲームを終了する
+
+/ タイトル
+div data-role="page" data-dialog="true" id="death" data-theme="b"
+  div data-role="content"
+    h1 あなたは死んだ
+    h3 v-text="menu.msg_1"
+    h3 v-text="menu.msg_2"
+    h3 v-text="menu.msg_3"
+    h3 v-text="menu.msg_4"
+    a.ui-btn href="#top" タイトルページへ
 
 / キャラクター作成　種族選択
 div data-role="page" id="races" data-theme="b"
@@ -128,33 +177,36 @@ div data-role="page" id="confirm" data-theme="b"
       li: h3 v-text="pc.job.name"
 
     div data-role="controlgroup" data-type="horizontal"
-      a href="#main" data-role="button" data-icon="check" 始める
+      a href="#main" data-role="button" data-icon="check" @click="setPage(menus[0])" 始める
 
 / 村
 div data-role="page" id="main" data-theme="b"
   div data-role="header" data-position="fixed"
-    h1 v-text="menu.area_name"
+    h1 v-text="menu.area"
 
   div data-role="content"
     ul data-role="listview"
 
       li data-role="list-divider" メッセージ
       li
-        h3 v-text="menu.place_name"
+        h3 v-text="menu.msg_1"
+        h3 v-text="menu.msg_2"
+        h3 v-text="menu.msg_3"
+        h3 v-text="menu.msg_4"
 
       li data-role="list-divider" アクション
       div data-role="controlgroup"
         .ui-grid-a
           .ui-block-a
-            button.ui-btn @click="action(menu.menu_1)" v-text="menu.menu_1 || '　　　'"
-            button.ui-btn @click="action(menu.menu_2)" v-text="menu.menu_2 || '　　　'"
-            button.ui-btn @click="action(menu.menu_3)" v-text="menu.menu_3 || '　　　'"
-            button.ui-btn @click="action(menu.menu_4)" v-text="menu.menu_4 || '　　　'"
+            button.ui-btn @click="action(menu.page_1)" v-text="menu.page_1 || '　　　'"
+            button.ui-btn @click="action(menu.page_2)" v-text="menu.page_2 || '　　　'"
+            button.ui-btn @click="action(menu.page_3)" v-text="menu.page_3 || '　　　'"
+            button.ui-btn @click="action(menu.page_4)" v-text="menu.page_4 || '　　　'"
           .ui-block-b
-            button.ui-btn @click="action(menu.menu_5)" v-text="menu.menu_5 || '　　　'"
-            button.ui-btn @click="action(menu.menu_6)" v-text="menu.menu_6 || '　　　'"
-            button.ui-btn @click="action(menu.menu_7)" v-text="menu.menu_7 || '　　　'"
-            button.ui-btn @click="action(menu.menu_8)" v-text="menu.menu_8 || '　　　'"
+            button.ui-btn @click="action(menu.page_5)" v-text="menu.page_5 || '　　　'"
+            button.ui-btn @click="action(menu.page_6)" v-text="menu.page_6 || '　　　'"
+            button.ui-btn @click="action(menu.page_7)" v-text="menu.page_7 || '　　　'"
+            button.ui-btn @click="action(menu.page_8)" v-text="menu.page_8 || '　　　'"
 
 
       li data-role="list-divider" お前

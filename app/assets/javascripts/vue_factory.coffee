@@ -11,7 +11,6 @@ class @VueFactory
 
       methods:
         onChange: (changes,source) ->
-          return if source isnt "edit"
           @handleChange(change) for change in changes
 
         handleChange: (change)->

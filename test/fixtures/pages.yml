@@ -1,0 +1,37 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  area: MyString
+  place: MyString
+  name: MyString
+  info: MyString
+  page_1: MyString
+  page_2: MyString
+  page_3: MyString
+  page_4: MyString
+  page_5: MyString
+  page_6: MyString
+  page_7: MyString
+  page_8: MyString
+  msg_1: MyString
+  msg_2: MyString
+  msg_3: MyString
+  msg_4: MyString
+
+two:
+  area: MyString
+  place: MyString
+  name: MyString
+  info: MyString
+  page_1: MyString
+  page_2: MyString
+  page_3: MyString
+  page_4: MyString
+  page_5: MyString
+  page_6: MyString
+  page_7: MyString
+  page_8: MyString
+  msg_1: MyString
+  msg_2: MyString
+  msg_3: MyString
+  msg_4: MyString

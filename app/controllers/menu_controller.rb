@@ -1,10 +1,8 @@
-require "csv"
-
 class MenuController < ApplicationController
   layout "menu"
 
   def index
-    gon.races = Race.all.map{|race|
+    gon.races = Race.includes(:initial_abilities => :ability).map{|race|
       {
         id: race.id,
         name: race.name,
@@ -25,8 +23,8 @@ class MenuController < ApplicationController
       }
     }
 
-    table = CSV.table(Rails.root.join("db/fixtures/menu.csv"), encoding: "Shift_JIS:UTF-8")
-    gon.menus = table.map(&:to_h)
+    gon.menus = Page.all
+    gon.menu = Page.first
   end
 
 end

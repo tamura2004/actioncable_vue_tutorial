@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :pages
   resources :jobs
   resources :races_initial_abilities
   resources :races

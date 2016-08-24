@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160811122239) do
+ActiveRecord::Schema.define(version: 20160824114908) do
 
   create_table "abilities", force: :cascade do |t|
     t.string   "name"
@@ -37,6 +37,27 @@ ActiveRecord::Schema.define(version: 20160811122239) do
 
   create_table "messages", force: :cascade do |t|
     t.text     "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pages", force: :cascade do |t|
+    t.string   "area"
+    t.string   "place"
+    t.string   "name"
+    t.string   "info"
+    t.string   "page_1"
+    t.string   "page_2"
+    t.string   "page_3"
+    t.string   "page_4"
+    t.string   "page_5"
+    t.string   "page_6"
+    t.string   "page_7"
+    t.string   "page_8"
+    t.string   "msg_1"
+    t.string   "msg_2"
+    t.string   "msg_3"
+    t.string   "msg_4"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

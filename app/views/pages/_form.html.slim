@@ -1,0 +1,57 @@
+= form_for @page do |f|
+  - if @page.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@page.errors.count, "error")} prohibited this page from being saved:"
+      ul
+        - @page.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :area
+    = f.text_field :area
+  .field
+    = f.label :place
+    = f.text_field :place
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :info
+    = f.text_field :info
+  .field
+    = f.label :page_1
+    = f.text_field :page_1
+  .field
+    = f.label :page_2
+    = f.text_field :page_2
+  .field
+    = f.label :page_3
+    = f.text_field :page_3
+  .field
+    = f.label :page_4
+    = f.text_field :page_4
+  .field
+    = f.label :page_5
+    = f.text_field :page_5
+  .field
+    = f.label :page_6
+    = f.text_field :page_6
+  .field
+    = f.label :page_7
+    = f.text_field :page_7
+  .field
+    = f.label :page_8
+    = f.text_field :page_8
+  .field
+    = f.label :msg_1
+    = f.text_field :msg_1
+  .field
+    = f.label :msg_2
+    = f.text_field :msg_2
+  .field
+    = f.label :msg_3
+    = f.text_field :msg_3
+  .field
+    = f.label :msg_4
+    = f.text_field :msg_4
+  .actions = f.submit
