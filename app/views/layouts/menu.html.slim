@@ -6,10 +6,6 @@ html lang="ja"
     meta name="viewport" content="width=device-width, initial-scale=1.0"
     title= content_for?(:title) ? yield(:title) : "ActionCableChatTutorial"
     = csrf_meta_tags
-
-    link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"
-    script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"
-
     = stylesheet_link_tag "application", :media => "all"
     = javascript_include_tag "application"
     = include_gon
