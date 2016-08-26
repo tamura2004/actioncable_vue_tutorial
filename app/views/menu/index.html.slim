@@ -20,21 +20,30 @@ coffee:
           battle: false
           name: null
           hp: 0
-          atk: 12
-          def: 12
+          attack: 12
+          defence: 12
           win: null
+          exp: 0
 
       methods:
         diceLabel: (race) -> race.initialAbilities.map((a) -> "#{a.name}：#{a.value}d6+#{8 - a.value}").join(" / ")
         abilityLabel: -> @pc.abilities.map((a) -> "#{a.name}：#{a.value}").join(" / ")
-        ability: (name) => @pc.abilities.find((a)->a.name is name).value
+
+        ability: (name) ->
+          console.log  @pc
+          console.log name
+          @pc.abilities.find((a)->a.name is name).value
+
         paramsLabel: ->
-          "#{@hp}hp / #{@pc.gp}gp / #{@pc.exp}exp / #{@pc.level}level"
+          "#{@pc.hp}hp / #{@pc.gp}gp / #{@pc.exp}exp / #{@pc.level}level"
+
         setRace: (race) ->
           @pc.race = race
           @rollDice()
 
-        setJob: (job) -> @pc.job = job
+        setJob: (job) ->
+          console.log job
+          @pc.job = job.name
 
         rollDice: ->
           @pc.abilities = @pc.race.initialAbilities.map (a) =>
@@ -60,87 +69,122 @@ coffee:
           @menu.page_7 = menu.page_7
           @menu.page_8 = menu.page_8
 
+        clearPage: ->
+          @menu.page_1 = null
+          @menu.page_2 = null
+          @menu.page_3 = null
+          @menu.page_4 = null
+          @menu.page_5 = null
+          @menu.page_6 = null
+          @menu.page_7 = null
+          @menu.page_8 = null
+
         setMessage: (menu) ->
           @menu.msg_1 = menu.msg_1
           @menu.msg_2 = menu.msg_2
           @menu.msg_3 = menu.msg_3
           @menu.msg_4 = menu.msg_4
 
+        levelUpCheck: ->
+          if @pc.level < @pc.exp/50
+            @pc.level += 1
+            @pc.hp = @ability("耐久") * @pc.level
+            @menu.msg_3 = "レベルアップ！"
+
+        youDead: ->
+          @menu.msg_2  = "あなたは死んだ"
+          @monster.battle = false
+          $('body').pagecontainer("change","#death")
+
+        youWin: ->
+          @menu.msg_2  = "#{@monster.name}を倒した"
+          @clearPage()
+          @menu.page_1 = "勝った・・・"
+          @monster.battle = false
+          @pc.exp += @monster.exp
+          @levelUpCheck()
+
         enemyAttack: ->
           if @d6(4) > @ability("敏捷")
-            dmg = @d6(3) + @monster.atk - @ability("耐久")
+            dmg = @d6(3) + @monster.attack - @ability("耐久")
             dmg = @d6(1) if dmg < 0
-            @menu.msg_1 = "#{@monster.name}の攻撃。おまえに#{dmg}ダメージ"
+            @menu.msg_2 = "#{@monster.name}の攻撃。おまえに#{dmg}ダメージ"
             @pc.hp -= dmg
             if @pc.hp <= 0
-              @menu.msg_2  = "あなたは死んだ"
-              $('body').pagecontainer("change","#death")
+              youDead()
+
           else
-            @menu.msg_1 = "あなたはひらりと身をかわした"
+            @menu.msg_2 = "あなたはひらりと身をかわした"
 
         normalAttack: ->
           if @d6(2) < @ability("敏捷")
-            dmg = @d6(3) + @ability("筋力") - @monster.def
+            dmg = @d6(3) + @ability("筋力") - @monster.defence
             dmg = @d6(1) if dmg < 0
             @menu.msg_1 = "お前の攻撃！#{@monster.name}に#{dmg}ダメージ"
             @monster.hp -= dmg
             if @monster.hp <= 0
-              @menu.msg_2  = "#{@monster.name}を倒した"
-              @menu.page_1 = "やった"
+              @youWin()
           else
             @menu.msg_1 = "#{@monster.name}はひらりと身をかわした"
 
+        powerAttack: ->
+          if @d6(4) < @ability("敏捷")
+            dmg = @d6(10) + @ability("筋力") - @monster.defence
+            dmg = @d6(3) if dmg < 0
+            @menu.msg_1 = "強打！#{@monster.name}に#{dmg}ダメージ"
+            @monster.hp -= dmg
+            if @monster.hp <= 0
+              @youWin()
+          else
+            @menu.msg_1 = "#{@monster.name}はひらりと身をかわした"
+
+        fireBall: ->
+          dmg = @d6(10)
+          @monster.hp -= dmg
+          @pc.hp -= dmg
+          if @pc.hp < 0
+            @menu.msg_1 = "敵味方を巻き込むファイアボール！"
+            youDead()
+          else
+            if @monster.hp < 0
+              @menu.msg_3 = "#{@monstrer.name}は死んだ"
+              @menu.msg_4 = "レベルアップ！"
+              @pc.level += 1
+            else
+              @menu.msg_3 = "#{@monstrer.name}に#{dmg}ダメージ"
+
+        battle: (name)->
+          console.log name
+          switch name
+            when "通常攻撃"
+              @normalAttack()
+              @enemyAttack()
+
+            when "強打"
+              @powerAttack()
+              @enemyAttack()
+
+            when "ヒール"
+              heal = @d6(3)
+              @pc.hp += heal
+
+            when "ファイアボール"
+              @fireBall()
+
+            when "逃走"
+              if @d6(3) < @ability("敏捷")
+                @menu.page_1 = "やった"
+                @menu.msg_1 = "あなたは逃げ出した"
+
+            when "やった"
+              @monster.battle = false
+              @action(@monster.win)
+
         action: (name) ->
           if @monster.battle
-            switch name
-              when "通常攻撃"
-                @normalAttack()
-                @enemyAttack()
-
-              when "強打"
-                if @d6(4) < @ability("敏捷")
-                  dmg = @d6(10) + @ability("筋力") - @monster.def
-                  dmg = @d6(3) if dmg < 0
-                  @menu.msg_1 = "強打！#{@monster.name}に#{dmg}ダメージ"
-                  @monster.hp -= dmg
-                  if @monster.hp <= 0
-                    @menu.msg_2  = "#{@monster.name}を倒した"
-                    @menu.page_1 = "やった"
-                else
-                  @menu.msg_1 = "#{@monster.name}はひらりと身をかわした"
-
-                enemyAttack()
-
-              when "ヒール"
-                heal = @d6(3)
-                @pc.hp += heal
-
-              when "ファイアボール"
-                dmg = @d6(10)
-                @monster.hp -= dmg
-                @pc.hp -= dmg
-                if @pc.hp < 0
-                  @menu.msg_1 = "敵味方を巻き込むファイアボール！"
-                  @menu.msg_2 = "あなたは死んだ"
-                else
-                  if @monster.hp < 0
-                    @menu.msg_3 = "#{@monstrer.name}は死んだ"
-                    @menu.msg_4 = "レベルアップ！"
-                    @pc.level += 1
-                  else
-                    @menu.msg_3 = "#{@monstrer.name}に#{dmg}ダメージ"
-
-              when "逃走"
-                if @d6(3) < @ability("敏捷")
-                  @menu.page_1 = "やった"
-                  @menu.msg_1 = "あなたは逃げ出した"
-
-              when "やった"
-                @monster.battle = false
-                @action(@monster.win)
+            @battle(name)
 
           else
-
             menu = @menus.find((menu)=>menu.name is name) || @menus[0]
 
             switch menu.info
@@ -162,9 +206,12 @@ coffee:
                 @monster.battle = true
                 @monster.win = menu.page_1
                 @monster.name = menu.page_2
-                @monster.hp = menu.page_3
-                @monster.atk = menu.page_4
-                @monster.def = menu.page5
+                @monster.hp = Number(menu.page_3)
+                @monster.attack = Number(menu.page_4)
+                @monster.defence = Number(menu.page_5)
+                @monster.exp = Number(menu.page_6)
+
+                @setMessage(menu)
 
                 @menu.page_1 = "通常攻撃"
                 @menu.page_2 = null
@@ -177,6 +224,7 @@ coffee:
                   when "戦士" then @menu.page_3 = "強打"
                   when "僧侶" then @menu.page_3 = "ヒール"
                   when "盗賊" then @menu.page_3 = "ファイアボール"
+                  else @menu_page3 = null
 
 
 
@@ -301,6 +349,6 @@ div data-role="page" id="main" data-theme="b"
 
       li data-role="list-divider" お前
       li
-        h3 v-text="pc.race.name + '/' + pc.job.name"
+        h3 v-text="pc.race.name + '/' + pc.job"
         p v-text="abilityLabel()"
         p v-text="paramsLabel()"
