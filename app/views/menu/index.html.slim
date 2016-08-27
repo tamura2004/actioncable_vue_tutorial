@@ -139,19 +139,11 @@ coffee:
             @menu.msg_1 = "#{@monster.name}はひらりと身をかわした"
 
         fireBall: ->
-          dmg = @d6(10)
-          @monster.hp -= dmg
-          @pc.hp -= dmg
-          if @pc.hp < 0
-            @menu.msg_1 = "敵味方を巻き込むファイアボール！"
-            youDead()
-          else
-            if @monster.hp < 0
-              @menu.msg_3 = "#{@monstrer.name}は死んだ"
-              @menu.msg_4 = "レベルアップ！"
-              @pc.level += 1
-            else
-              @menu.msg_3 = "#{@monstrer.name}に#{dmg}ダメージ"
+          @menu.msg_1 = "敵味方を巻き込むファイアボール！"
+          @monster.hp = 0
+          @pc.hp = 1
+
+          @menu.msg_3 = "#{@monstrer.name}は死んだ"
 
         battle: (name)->
           console.log name
@@ -180,6 +172,27 @@ coffee:
               @monster.battle = false
               @action(@monster.win)
 
+          @menu.msg_4 = "#{@monster.name} hp:#{@monster.hp} atk:#{@monster.attack}#{@monster.defence}"
+
+        enterBattle: (menu) ->
+          @monster.battle = true
+          @monster.win = menu.page_1
+          @monster.name = menu.page_2
+          @monster.hp = Number(menu.page_3)
+          @monster.attack = Number(menu.page_4)
+          @monster.defence = Number(menu.page_5)
+          @monster.exp = Number(menu.page_6)
+
+          @setMessage(menu)
+          @clearPage()
+
+          @menu.page_1 = "通常攻撃"
+          @menu.page_8 = "逃げる"
+          switch @pc.job
+            when "戦士" then @menu.page_3 = "強打"
+            when "僧侶" then @menu.page_3 = "ヒール"
+            when "魔法使い" then @menu.page_3 = "ファイアボール"
+
         action: (name) ->
           if @monster.battle
             @battle(name)
@@ -203,30 +216,7 @@ coffee:
                 @setMessage(menu)
 
               when "battle"
-                @monster.battle = true
-                @monster.win = menu.page_1
-                @monster.name = menu.page_2
-                @monster.hp = Number(menu.page_3)
-                @monster.attack = Number(menu.page_4)
-                @monster.defence = Number(menu.page_5)
-                @monster.exp = Number(menu.page_6)
-
-                @setMessage(menu)
-
-                @menu.page_1 = "通常攻撃"
-                @menu.page_2 = null
-                @menu.page_4 = null
-                @menu.page_5 = null
-                @menu.page_6 = null
-                @menu.page_7 = null
-                @menu.page_8 = "逃げる"
-                switch @pc.job
-                  when "戦士" then @menu.page_3 = "強打"
-                  when "僧侶" then @menu.page_3 = "ヒール"
-                  when "盗賊" then @menu.page_3 = "ファイアボール"
-                  else @menu_page3 = null
-
-
+                @enterBattle(menu)
 
 / タイトル
 div data-role="page" id="top" data-theme="b"
