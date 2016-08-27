@@ -25,6 +25,10 @@ coffee:
           win: null
           exp: 0
 
+      created: ->
+        unless @pc.race
+          @loadPc()
+
       methods:
         diceLabel: (race) -> race.initialAbilities.map((a) -> "#{a.name}：#{a.value}d6+#{8 - a.value}").join(" / ")
         abilityLabel: -> @pc.abilities.map((a) -> "#{a.name}：#{a.value}").join(" / ")
@@ -52,6 +56,14 @@ coffee:
             value: @d6(a.value) + 8 - a.value
 
           @pc.hp = @ability("耐久") * @pc.level
+          @savePc()
+
+        loadPc: ->
+          @pc = JSON.parse(localStorage.getItem("pc"))
+
+        savePc: ->
+          localStorage.setItem("pc", JSON.stringify(@pc));
+
 
         d6: (n) -> (Math.floor(Math.random()*6+1) for i in [1..n]).reduce((a,b)->a+b)
 
