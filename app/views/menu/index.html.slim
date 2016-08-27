@@ -59,7 +59,9 @@ coffee:
           @savePc()
 
         loadPc: ->
-          @pc = JSON.parse(localStorage.getItem("pc"))
+          pc = JSON.parse(localStorage.getItem("pc"))
+          if pc?
+            @pc = pc
 
         savePc: ->
           localStorage.setItem("pc", JSON.stringify(@pc));
