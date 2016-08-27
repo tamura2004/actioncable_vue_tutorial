@@ -111,7 +111,7 @@ coffee:
             @menu.msg_2 = "#{@monster.name}の攻撃。おまえに#{dmg}ダメージ"
             @pc.hp -= dmg
             if @pc.hp <= 0
-              youDead()
+              @youDead()
 
           else
             @menu.msg_2 = "あなたはひらりと身をかわした"
