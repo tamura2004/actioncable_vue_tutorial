@@ -70,6 +70,8 @@ coffee:
 
         _d: (n,m) -> (Math.floor(Math.random()*m+1) for i in [1..n]).reduce((a,b)->a+b)
 
+        setStartPage: -> @menus.find((m) -> m.name is "祭壇")
+
         setPage: (menu) ->
           @menu.area = menu.area
           @menu.place = menu.place
@@ -351,7 +353,7 @@ div data-role="page" id="confirm" data-theme="b"
       li: h3 v-text="pc.job.name"
 
     div data-role="controlgroup" data-type="horizontal"
-      a href="#main" data-role="button" data-icon="check" @click="setPage(menus[0])" 始める
+      a href="#main" data-role="button" data-icon="check" @click="setStartPage" 始める
 
 / 村
 div data-role="page" id="main" data-theme="b"
@@ -360,6 +362,19 @@ div data-role="page" id="main" data-theme="b"
 
   div data-role="content"
     ul data-role="listview"
+
+      li data-role="list-divider" メッセージ
+      li
+        h3 v-text="menu.msg_1 || '　　　'"
+        h3 v-text="menu.msg_2 || '　　　'"
+        h3 v-text="menu.msg_3 || '　　　'"
+        h3 v-text="menu.msg_4 || '　　　'"
+
+      li data-role="list-divider" お前
+      li
+        h3 v-text="pc.race.name + '/' + pc.job"
+        p v-text="abilityLabel()"
+        p v-text="paramsLabel()"
 
       li data-role="list-divider" アクション
       div data-role="controlgroup"
@@ -373,17 +388,4 @@ div data-role="page" id="main" data-theme="b"
             button.ui-btn @click="action(menu.page_5)" v-text="menu.page_5 || '　　　'"
             button.ui-btn @click="action(menu.page_6)" v-text="menu.page_6 || '　　　'"
 
-
-      li data-role="list-divider" お前
-      li
-        h3 v-text="pc.race.name + '/' + pc.job"
-        p v-text="abilityLabel()"
-        p v-text="paramsLabel()"
-
-      li data-role="list-divider" メッセージ
-      li
-        h3 v-text="menu.msg_1"
-        h3 v-text="menu.msg_2"
-        h3 v-text="menu.msg_3"
-        h3 v-text="menu.msg_4"
 
