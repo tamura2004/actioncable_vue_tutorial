@@ -1,9 +1,12 @@
-ol.breadcrumb
-  li
-    = link_to "ホーム", root_path
-  li
-    = link_to "チャート", root_path
-  li.active ページ
+
+= link_to "EXCELファイルでダウンロード", pages_path(format: "xlsx"), class: "btn btn-primary"
+hr
+
+= form_tag upload_pages_path, multipart: true do
+  = label_tag "EXCELファイルでアップロード"
+  = file_field_tag :file
+  = submit_tag "登録"
+hr
 
 #pages
 coffee:

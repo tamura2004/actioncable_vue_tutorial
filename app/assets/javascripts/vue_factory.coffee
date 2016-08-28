@@ -1,8 +1,9 @@
 class @VueFactory
   @create: (name) ->
     new Vue
-      el: "##{name}"
+      el: "body"
       data:
+        login: false
         records: if gon[name] then gon[name].records else gon.records
       created: ->
         @resource = new Resource name

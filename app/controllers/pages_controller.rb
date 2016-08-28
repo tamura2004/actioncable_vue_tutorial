@@ -1,65 +1,50 @@
 class PagesController < ApplicationController
   before_action :set_page, only: [:show, :edit, :update, :destroy]
 
+  ATTRIBUTES = %w(id area place name info) + 6.times.map{|i|"page_#{i+1}"} + 4.times.map{|i|"msg_#{i+1}"}
+  LABELS = %w(id 地域 場所 名称 種別) + 6.times.map{|i|"メニュー#{i+1}"} + 4.times.map{|i|"メッセージ#{i+1}"}
+  HEADERS = ATTRIBUTES.inject({}){|memo,a| memo.merge a.to_sym => a}
+
   # GET /pages
   # GET /pages.json
   def index
-    gon.records = Page.all
-    gon.options = {
-      colHeaders: [
-        "地域",
-        "場所",
-        "名称",
-        "種別",
-        "メニュー1",
-        "メニュー2",
-        "メニュー3",
-        "メニュー4",
-        "メニュー5",
-        "メニュー6",
-        "メニュー7",
-        "メニュー8",
-        "メッセージ1",
-        "メッセージ2",
-        "メッセージ3",
-        "メッセージ4"
-      ],
-      columns: [
-        {data: "area"},
-        {data: "place"},
-        {data: "name"},
-        {data: "info"},
-        {data: "page_1"},
-        {data: "page_2"},
-        {data: "page_3"},
-        {data: "page_4"},
-        {data: "page_5"},
-        {data: "page_6"},
-        {data: "page_7"},
-        {data: "page_8"},
-        {data: "msg_1"},
-        {data: "msg_2"},
-        {data: "msg_3"},
-        {data: "msg_4"}
-      ],
-      minSpareRows: 1,
-      contextMenu: ["remove_row"]
-    }
+    respond_to do |format|
+      format.html do
+        gon.records = Page.order(:id)
+        gon.options = {
+          colHeaders: LABELS,
+          columns: ATTRIBUTES.map{|a|{data: a}},
+          minSpareRows: 1,
+          columnSorting: true,
+          contextMenu: ["remove_row"]
+        }
+      end
+
+      format.xlsx do
+        @attributes = ATTRIBUTES
+        timestamp = Time.zone.now.strftime("%Y%m%d%H%M%S")
+        filename = "pages_#{timestamp}.xlsx"
+        response.headers['Content-Disposition'] = "attachment; filename=#{filename}"
+      end
+    end
+
 
   end
 
-  # GET /pages/1
-  # GET /pages/1.json
-  def show
-  end
+  def upload
+    file = params[:file].path.to_s
+    xlsx = Roo::Excelx.new(file)
 
-  # GET /pages/new
-  def new
-    @page = Page.new
-  end
+    Page.transaction do
+      xlsx.sheet("pages").each(HEADERS) do |param|
+        next if param[:id] == "id"
+        Page.find_or_initialize_by(id: param[:id]).update(param)
+      end
+    end
+    redirect_to :pages
 
-  # GET /pages/1/edit
-  def edit
+    rescue => e
+    render json: e.message
   end
 
   # POST /pages

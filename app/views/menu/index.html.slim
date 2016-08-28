@@ -81,8 +81,6 @@ coffee:
           @menu.page_4 = menu.page_4
           @menu.page_5 = menu.page_5
           @menu.page_6 = menu.page_6
-          @menu.page_7 = menu.page_7
-          @menu.page_8 = menu.page_8
 
         clearPage: ->
           @menu.page_1 = null
@@ -91,8 +89,6 @@ coffee:
           @menu.page_4 = null
           @menu.page_5 = null
           @menu.page_6 = null
-          @menu.page_7 = null
-          @menu.page_8 = null
 
         setMessage: (menu) ->
           @menu.msg_1 = menu.msg_1
@@ -219,7 +215,7 @@ coffee:
           @clearPage()
 
           @menu.page_1 = "通常攻撃"
-          @menu.page_8 = "逃げる"
+          @menu.page_6 = "逃げる"
           switch @pc.job
             when "戦士" then @menu.page_3 = "強打"
             when "僧侶" then @menu.page_3 = "ヒール"
@@ -263,9 +259,9 @@ div data-role="page" id="top" data-theme="b"
   div data-role="content"
     = image_tag "title.png", class: "img-responsive"
     ul data-role="listview" data-inset="true"
-      li: a href="#races" 初めから
+      li: a href="#races" キャラクター作成
       li: a href="#main" 続きから
-      li: a href="#races" ゲームを終了する
+      li: a href="/pages" data-ajax="false" ゲームマスター画面
 
 / タイトル
 div data-role="page" data-dialog="true" id="death" data-theme="b"
@@ -372,12 +368,10 @@ div data-role="page" id="main" data-theme="b"
             button.ui-btn @click="action(menu.page_1)" v-text="menu.page_1 || '　　　'"
             button.ui-btn @click="action(menu.page_2)" v-text="menu.page_2 || '　　　'"
             button.ui-btn @click="action(menu.page_3)" v-text="menu.page_3 || '　　　'"
-            button.ui-btn @click="action(menu.page_4)" v-text="menu.page_4 || '　　　'"
           .ui-block-b
+            button.ui-btn @click="action(menu.page_4)" v-text="menu.page_4 || '　　　'"
             button.ui-btn @click="action(menu.page_5)" v-text="menu.page_5 || '　　　'"
             button.ui-btn @click="action(menu.page_6)" v-text="menu.page_6 || '　　　'"
-            button.ui-btn @click="action(menu.page_7)" v-text="menu.page_7 || '　　　'"
-            button.ui-btn @click="action(menu.page_8)" v-text="menu.page_8 || '　　　'"
 
 
       li data-role="list-divider" お前

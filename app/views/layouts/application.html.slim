@@ -7,14 +7,14 @@ html lang="en"
     meta name="apple-mobile-web-app-capable" content="yes"
     meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"
 
-    title= content_for?(:title) ? yield(:title) : "ActionCableChatTutorial"
+    title 宵闇迷宮
     = csrf_meta_tags
     = stylesheet_link_tag "application", :media => "all"
     = include_gon
     = javascript_include_tag "application"
 
   body
-    = nav_bar fixed: :top, brand: "闇魂", responsice: true
+    = nav_bar fixed: :top, brand: "宵闇迷宮"
       = menu_group
         = menu_item "モバイル画面", menu_index_path
         = drop_down "データ"

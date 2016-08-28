@@ -12,7 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery.mobile
 //= require twitter/bootstrap
 //= require vue
 //= require vue-resource
