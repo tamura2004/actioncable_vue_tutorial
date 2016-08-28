@@ -5,11 +5,6 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-require "csv"
 
-Page.delete_all
-table = CSV.table(Rails.root.join("db","seeds.csv"),encoding: "Shift_JIS:UTF-8")
-table.each do |row|
-  Page.create(row.to_h)
-end
-
+sql = open(Rails.root.join("db","seeds.sql")).read
+ActiveRecord::Base.connection.execute sql

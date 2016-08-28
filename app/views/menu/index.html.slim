@@ -100,11 +100,17 @@ coffee:
           @menu.msg_3 = menu.msg_3
           @menu.msg_4 = menu.msg_4
 
+        clearMessage: (menu) ->
+          @menu.msg_1 = null
+          @menu.msg_2 = null
+          @menu.msg_3 = null
+          @menu.msg_4 = null
+
         levelUpCheck: ->
-          if @pc.level < @pc.exp/50
-            @pc.level += 1
+          if @pc.level < @pc.exp/100
+            @pc.level = Math.floor(@pc.exp/100)
             @pc.hp = @ability("耐久") * @pc.level
-            @menu.msg_3 = "レベルアップ！"
+            @menu.msg_3 = "レベルアップ！#{@pc.level}レベルになった"
 
         youDead: ->
           @menu.msg_3  = "おまえは死んだ"
@@ -115,20 +121,19 @@ coffee:
           @menu.msg_2  = "#{@monster.name}を倒した"
           @clearPage()
           @menu.page_1 = "勝った・・・"
-          @monster.battle = false
           @pc.exp += @monster.exp
           @levelUpCheck()
 
-        youDeadCheck: -> @youDead if @pc.hp <= 0
+        youDeadCheck: -> @youDead() if @pc.hp <= 0
 
-        youWinCheck: -> @youWin if @monster.hp <= 0
+        youWinCheck: -> @youWin() if @monster.hp <= 0
 
         enemyAttack: ->
           if @d100(1) < @ability("敏捷")
             @menu.msg_2 = "あなたはひらりと身をかわした"
 
           else
-            dmg = @d6(3) + @monster.attack - @ability("耐久") - @pc.level
+            dmg = @enemyAttackDamage()
             dmg = @d6(1) if dmg < 0
             @pc.hp -= dmg
             @menu.msg_2 = "#{@monster.name}の攻撃。おまえに#{dmg}ダメージ"
@@ -147,6 +152,9 @@ coffee:
         normalAttack: -> @baseAttack(@normalAttackDamage())
 
         powerAttack: -> @baseAttack(@powerAttackDamage())
+
+        enemyAttackDamage: ->
+          @d6(3) + @monster.attack - @ability("耐久") - @pc.level
 
         normalAttackDamage: ->
           @d6(3) + @ability("筋力") + @pc.level - @monster.defence
@@ -218,11 +226,15 @@ coffee:
             when "魔法使い" then @menu.page_3 = "ファイアボール"
 
         action: (name) ->
+          console.log "action"
+          console.log name
           if @monster.battle
             @battle(name)
 
           else
             menu = @menus.find((menu)=>menu.name is name) || @menus[0]
+            console.log "menu"
+            console.log menu.name
 
             switch menu.info
               when "place"
@@ -353,13 +365,6 @@ div data-role="page" id="main" data-theme="b"
   div data-role="content"
     ul data-role="listview"
 
-      li data-role="list-divider" メッセージ
-      li
-        h3 v-text="menu.msg_1"
-        h3 v-text="menu.msg_2"
-        h3 v-text="menu.msg_3"
-        h3 v-text="menu.msg_4"
-
       li data-role="list-divider" アクション
       div data-role="controlgroup"
         .ui-grid-a
@@ -380,3 +385,11 @@ div data-role="page" id="main" data-theme="b"
         h3 v-text="pc.race.name + '/' + pc.job"
         p v-text="abilityLabel()"
         p v-text="paramsLabel()"
+
+      li data-role="list-divider" メッセージ
+      li
+        h3 v-text="menu.msg_1"
+        h3 v-text="menu.msg_2"
+        h3 v-text="menu.msg_3"
+        h3 v-text="menu.msg_4"
+

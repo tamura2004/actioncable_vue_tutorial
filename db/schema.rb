@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20160824114908) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "abilities", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -31,8 +34,8 @@ ActiveRecord::Schema.define(version: 20160824114908) do
     t.string   "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["ability_id"], name: "index_jobs_initial_abilities_on_ability_id"
-    t.index ["job_id"], name: "index_jobs_initial_abilities_on_job_id"
+    t.index ["ability_id"], name: "index_jobs_initial_abilities_on_ability_id", using: :btree
+    t.index ["job_id"], name: "index_jobs_initial_abilities_on_job_id", using: :btree
   end
 
   create_table "messages", force: :cascade do |t|
@@ -75,8 +78,12 @@ ActiveRecord::Schema.define(version: 20160824114908) do
     t.string   "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["ability_id"], name: "index_races_initial_abilities_on_ability_id"
-    t.index ["race_id"], name: "index_races_initial_abilities_on_race_id"
+    t.index ["ability_id"], name: "index_races_initial_abilities_on_ability_id", using: :btree
+    t.index ["race_id"], name: "index_races_initial_abilities_on_race_id", using: :btree
   end
 
+  add_foreign_key "jobs_initial_abilities", "abilities"
+  add_foreign_key "jobs_initial_abilities", "jobs"
+  add_foreign_key "races_initial_abilities", "abilities"
+  add_foreign_key "races_initial_abilities", "races"
 end

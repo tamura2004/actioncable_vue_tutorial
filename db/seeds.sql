@@ -2,12 +2,16 @@
 -- PostgreSQL database dump
 --
 
+-- Dumped from database version 9.5.3
+-- Dumped by pg_dump version 9.5.3
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
+SET row_security = off;
 
 SET search_path = public, pg_catalog;
 
@@ -25,13 +29,6 @@ INSERT INTO abilities VALUES (2, '耐久', '2016-08-11 13:42:31.616637', '2016-0
 --
 
 SELECT pg_catalog.setval('abilities_id_seq', 3, false);
-
-
---
--- Data for Name: ar_internal_metadata; Type: TABLE DATA; Schema: public; Owner: tamura
---
-
-INSERT INTO ar_internal_metadata VALUES ('environment', 'production', '2016-07-18 07:15:33.820502', '2016-07-18 07:15:33.820502');
 
 
 --
@@ -125,7 +122,6 @@ INSERT INTO pages VALUES (25, '隙間の洞', '魔女の家', '受け取らな�
 INSERT INTO pages VALUES (37, '地下墓地', '骨塚', '赤いボタンを押す', 'death', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '炎の爆発！', '黒焦げになってお前は死んだ。', NULL, NULL, '2016-08-28 00:23:48.695314', '2016-08-28 00:26:05.823075');
 INSERT INTO pages VALUES (36, '地下墓地', '骨塚', '隠し扉を開ける', 'death', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '扉の向こうから汚水が殺到する', 'すごい量だ', 'たちまち溺れてお前は死んだ', NULL, '2016-08-28 00:23:48.661426', '2016-08-28 00:24:34.742686');
 INSERT INTO pages VALUES (34, '地下墓地', '骨塚', '指輪を捨てる', 'message', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '捨てられない！', '捨ててはいけない！', NULL, NULL, '2016-08-28 00:21:05.729667', '2016-08-28 00:21:31.797563');
-INSERT INTO pages VALUES (39, '地下墓地', '骨塚', '青いボタンを押す', 'death', '隠し扉に入る', NULL, NULL, NULL, '骨塚に戻る', NULL, NULL, NULL, '排水ボタンだ！', '扉の向こうで水が流れていく音がする', NULL, NULL, '2016-08-28 00:25:23.849592', '2016-08-28 00:33:16.262081');
 INSERT INTO pages VALUES (40, '地下墓地', '骨塚', '緑のボタンを押す', 'death', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '頭上からスライム！', 'ゆっくりと消化されてお前は死んだ', NULL, NULL, '2016-08-28 00:25:27.026396', '2016-08-28 00:29:10.530021');
 INSERT INTO pages VALUES (38, '地下墓地', '骨塚', '隠し扉を調べる', 'place', '赤いボタンを押す', '青いボタンを押す', '緑のボタンを押す', '黄色いボタンを押す', '骨塚に戻る', NULL, NULL, NULL, '扉の向こうは大量の液体があるようだ', '操作ボタンを見つけた', 'どれが排水ボタンなのか・・・', NULL, '2016-08-28 00:23:48.696928', '2016-08-28 00:33:15.483358');
 INSERT INTO pages VALUES (41, '地下墓地', '骨塚', '黄色いボタンを押す', 'death', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '黄色いガス！', '多幸感でゲラゲラ笑いながらお前は死んだ', NULL, NULL, '2016-08-28 00:25:30.692017', '2016-08-28 00:29:10.535706');
@@ -140,6 +136,7 @@ INSERT INTO pages VALUES (51, '最初の村', '村の広場', '亡骸に祈る',
 INSERT INTO pages VALUES (44, '地下墓地', '骨塚', '北の暗闇へ', 'message', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '行き止まりだ・・・', NULL, NULL, NULL, '2016-08-28 00:34:15.034869', '2016-08-28 00:34:33.582918');
 INSERT INTO pages VALUES (45, '地下墓地', '骨塚', '南の暗闇へ', 'message', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '行き止まりだ・・・', NULL, NULL, NULL, '2016-08-28 00:34:18.134591', '2016-08-28 00:34:36.088358');
 INSERT INTO pages VALUES (42, '地下墓地', '骨塚', '隠し扉に入る', 'place', '飛び降りて村へ', NULL, NULL, NULL, '骨塚に戻る', NULL, NULL, NULL, '目の前に大きな裂け目がある。液体は裂け目に流れていった。', '裂け目の向こうに村が見える。飛び降りていけそうだが、戻ることはできまい。', NULL, NULL, '2016-08-28 00:30:31.128873', '2016-08-28 00:39:17.834496');
+INSERT INTO pages VALUES (39, '地下墓地', '骨塚', '青いボタンを押す', 'place', '隠し扉に入る', NULL, NULL, NULL, '骨塚に戻る', NULL, NULL, NULL, '排水ボタンだ！', '扉の向こうで水が流れていく音がする', NULL, NULL, '2016-08-28 00:25:23.849592', '2016-08-28 02:55:44.388932');
 
 
 --
@@ -185,20 +182,6 @@ INSERT INTO races_initial_abilities VALUES (9, 2, 2, '5', '2016-08-11 13:42:31.7
 --
 
 SELECT pg_catalog.setval('races_initial_abilities_id_seq', 10, false);
-
-
---
--- Data for Name: schema_migrations; Type: TABLE DATA; Schema: public; Owner: tamura
---
-
-INSERT INTO schema_migrations VALUES ('20160718012216');
-INSERT INTO schema_migrations VALUES ('20160807115248');
-INSERT INTO schema_migrations VALUES ('20160807120302');
-INSERT INTO schema_migrations VALUES ('20160807120737');
-INSERT INTO schema_migrations VALUES ('20160807121100');
-INSERT INTO schema_migrations VALUES ('20160811122239');
-INSERT INTO schema_migrations VALUES ('20160824114908');
-
 
 --
 -- PostgreSQL database dump complete
