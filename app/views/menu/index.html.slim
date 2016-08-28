@@ -34,8 +34,6 @@ coffee:
         abilityLabel: -> @pc.abilities.map((a) -> "#{a.name}：#{a.value}").join(" / ")
 
         ability: (name) ->
-          console.log  @pc
-          console.log name
           @pc.abilities.find((a)->a.name is name).value
 
         paramsLabel: ->
@@ -67,7 +65,10 @@ coffee:
           localStorage.setItem("pc", JSON.stringify(@pc));
 
 
-        d6: (n) -> (Math.floor(Math.random()*6+1) for i in [1..n]).reduce((a,b)->a+b)
+        d6: (n) -> @_d(n,6)
+        d100: (n) -> @_d(n,100)
+
+        _d: (n,m) -> (Math.floor(Math.random()*m+1) for i in [1..n]).reduce((a,b)->a+b)
 
         setPage: (menu) ->
           @menu.area = menu.area
@@ -106,7 +107,7 @@ coffee:
             @menu.msg_3 = "レベルアップ！"
 
         youDead: ->
-          @menu.msg_2  = "あなたは死んだ"
+          @menu.msg_3  = "おまえは死んだ"
           @monster.battle = false
           $('body').pagecontainer("change","#death")
 
@@ -118,39 +119,40 @@ coffee:
           @pc.exp += @monster.exp
           @levelUpCheck()
 
-        enemyAttack: ->
-          if @d6(4) > @ability("敏捷")
-            dmg = @d6(3) + @monster.attack - @ability("耐久")
-            dmg = @d6(1) if dmg < 0
-            @menu.msg_2 = "#{@monster.name}の攻撃。おまえに#{dmg}ダメージ"
-            @pc.hp -= dmg
-            if @pc.hp <= 0
-              @youDead()
+        youDeadCheck: -> @youDead if @pc.hp <= 0
 
-          else
+        youWinCheck: -> @youWin if @monster.hp <= 0
+
+        enemyAttack: ->
+          if @d100(1) < @ability("敏捷")
             @menu.msg_2 = "あなたはひらりと身をかわした"
 
-        normalAttack: ->
-          if @d6(2) < @ability("敏捷")
-            dmg = @d6(3) + @ability("筋力") - @monster.defence
+          else
+            dmg = @d6(3) + @monster.attack - @ability("耐久") - @pc.level
+            dmg = @d6(1) if dmg < 0
+            @pc.hp -= dmg
+            @menu.msg_2 = "#{@monster.name}の攻撃。おまえに#{dmg}ダメージ"
+            @youDeadCheck()
+
+        baseAttack: (dmg) ->
+          if @d100(1) < 5
+            @menu.msg_1 = "#{@monster.name}はひらりと身をかわした"
+
+          else
             dmg = @d6(1) if dmg < 0
             @menu.msg_1 = "お前の攻撃！#{@monster.name}に#{dmg}ダメージ"
             @monster.hp -= dmg
-            if @monster.hp <= 0
-              @youWin()
-          else
-            @menu.msg_1 = "#{@monster.name}はひらりと身をかわした"
+            @youWinCheck()
 
-        powerAttack: ->
-          if @d6(4) < @ability("敏捷")
-            dmg = @d6(10) + @ability("筋力") - @monster.defence
-            dmg = @d6(3) if dmg < 0
-            @menu.msg_1 = "強打！#{@monster.name}に#{dmg}ダメージ"
-            @monster.hp -= dmg
-            if @monster.hp <= 0
-              @youWin()
-          else
-            @menu.msg_1 = "#{@monster.name}はひらりと身をかわした"
+        normalAttack: -> @baseAttack(@normalAttackDamage())
+
+        powerAttack: -> @baseAttack(@powerAttackDamage())
+
+        normalAttackDamage: ->
+          @d6(3) + @ability("筋力") + @pc.level - @monster.defence
+
+        powerAttackDamage: ->
+          @d6(3) + @ability("筋力") * @pc.level - @monster.defence
 
         fireBall: ->
           @menu.msg_1 = "敵味方を巻き込むファイアボール！"
@@ -161,6 +163,7 @@ coffee:
 
         battle: (name)->
           console.log name
+          @clearMessage()
           switch name
             when "通常攻撃"
               @normalAttack()
@@ -178,11 +181,18 @@ coffee:
               @fireBall()
 
             when "逃げる"
-              if @d6(3) < @ability("敏捷")
+              if @d100(1) < @ability("敏捷")
                 @menu.page_1 = "やった"
-                @menu.msg_1 = "あなたは逃げ出した"
+                @menu.ms g_1 = "あなたは逃げ出した"
+
+              else
+                @enemyAttack()
 
             when "やった"
+              @monster.battle = false
+              @action(@monster.win)
+
+            when "勝った・・・"
               @monster.battle = false
               @action(@monster.win)
 
@@ -223,6 +233,10 @@ coffee:
                 @setMessage(menu)
                 $('body').pagecontainer("change","#death")
 
+              when "complete"
+                @setMessage(menu)
+                $('body').pagecontainer("change","#complete")
+
               when "message"
                 @setMessage(menu)
 
@@ -245,6 +259,16 @@ div data-role="page" id="top" data-theme="b"
 div data-role="page" data-dialog="true" id="death" data-theme="b"
   div data-role="content"
     h1 あなたは死んだ
+    h3 v-text="menu.msg_1"
+    h3 v-text="menu.msg_2"
+    h3 v-text="menu.msg_3"
+    h3 v-text="menu.msg_4"
+    a.ui-btn href="#top" タイトルページへ
+
+/ タイトル
+div data-role="page" data-dialog="true" id="complete" data-theme="b"
+  div data-role="content"
+    h1 おめでとう！シナリオクリア！
     h3 v-text="menu.msg_1"
     h3 v-text="menu.msg_2"
     h3 v-text="menu.msg_3"

@@ -13,7 +13,7 @@ gem 'jbuilder', '~> 2.5'
 group :development, :test do
   gem 'byebug', platform: :mri
   gem "pry-rails"
-  gem 'sqlite3'
+  # gem 'sqlite3'
 end
 
 group :development do
@@ -24,11 +24,11 @@ group :development do
 end
 
 group :production do
-  gem "pg"
   gem "rails_12factor"
   gem "redis"
 end
 
+gem "pg"
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "slim-rails"
 gem "vuejs-rails"
