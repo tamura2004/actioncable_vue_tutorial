@@ -5,17 +5,16 @@ coffee:
       data:
         races: gon.races
         jobs: gon.jobs
+        menus: gon.menus
+        menu: gon.menu
         pc:
           race: null
           job: null
           abilities: []
           gp: 0
           exp: 0
-          level: 2
+          level: 1
           hp: 0
-
-        menus: gon.menus
-        menu: gon.menu
         monster:
           battle: false
           name: null
@@ -25,9 +24,7 @@ coffee:
           win: null
           exp: 0
 
-      created: ->
-        unless @pc.race
-          @loadPc()
+      created: -> @loadPc() unless @pc.job
 
       methods:
         diceLabel: (race) -> race.initialAbilities.map((a) -> "#{a.name}：#{a.value}d6+#{8 - a.value}").join(" / ")
@@ -43,9 +40,7 @@ coffee:
           @pc.race = race
           @rollDice()
 
-        setJob: (job) ->
-          console.log job
-          @pc.job = job.name
+        setJob: (job) -> @pc.job = job.name
 
         rollDice: ->
           @pc.abilities = @pc.race.initialAbilities.map (a) =>
@@ -53,56 +48,35 @@ coffee:
             name: a.name
             value: @d6(a.value) + 8 - a.value
 
-          @pc.hp = @ability("耐久") * @pc.level
-          @savePc()
-
         loadPc: ->
           pc = JSON.parse(localStorage.getItem("pc"))
           if pc?
             @pc = pc
 
-        savePc: ->
-          localStorage.setItem("pc", JSON.stringify(@pc));
-
+        savePc: -> localStorage.setItem("pc", JSON.stringify(@pc));
 
         d6: (n) -> @_d(n,6)
         d100: (n) -> @_d(n,100)
 
         _d: (n,m) -> (Math.floor(Math.random()*m+1) for i in [1..n]).reduce((a,b)->a+b)
 
-        setStartPage: -> @menus.find((m) -> m.name is "祭壇")
+        setStartPage: ->
+          @menu = @menus.find((m) -> m.name is "祭壇")
+          @pc.hp = @ability("耐久") * @pc.level
+          @savePc()
 
         setPage: (menu) ->
           @menu.area = menu.area
           @menu.place = menu.place
           @menu.name = menu.name
           @menu.info = menu.info
-          @menu.page_1 = menu.page_1
-          @menu.page_2 = menu.page_2
-          @menu.page_3 = menu.page_3
-          @menu.page_4 = menu.page_4
-          @menu.page_5 = menu.page_5
-          @menu.page_6 = menu.page_6
+          @menu["page_#{i}"] = menu["page_#{i}"] for i in [1..6]
 
-        clearPage: ->
-          @menu.page_1 = null
-          @menu.page_2 = null
-          @menu.page_3 = null
-          @menu.page_4 = null
-          @menu.page_5 = null
-          @menu.page_6 = null
+        clearPage: -> @menu["page_#{i}"] = null for i in [1..6]
 
-        setMessage: (menu) ->
-          @menu.msg_1 = menu.msg_1
-          @menu.msg_2 = menu.msg_2
-          @menu.msg_3 = menu.msg_3
-          @menu.msg_4 = menu.msg_4
+        setMessage: (menu) -> @menu["msg_#{i}"] = menu["msg_#{i}"] for i in [1..4]
 
-        clearMessage: (menu) ->
-          @menu.msg_1 = null
-          @menu.msg_2 = null
-          @menu.msg_3 = null
-          @menu.msg_4 = null
+        clearMessage: (menu) -> @menu["msg_#{i}"] = null for i in [1..4]
 
         levelUpCheck: ->
           if @pc.level < @pc.exp/100
@@ -182,9 +156,11 @@ coffee:
             when "ヒール"
               heal = @d6(3)
               @pc.hp += heal
+              @enemyAttack()
 
             when "ファイアボール"
               @fireBall()
+              @enemyAttack()
 
             when "逃げる"
               if @d100(1) < @ability("敏捷")
@@ -239,14 +215,6 @@ coffee:
                 @setPage(menu)
                 @setMessage(menu)
 
-              when "death"
-                @setMessage(menu)
-                $('body').pagecontainer("change","#death")
-
-              when "complete"
-                @setMessage(menu)
-                $('body').pagecontainer("change","#complete")
-
               when "message"
                 @setMessage(menu)
 
@@ -256,13 +224,21 @@ coffee:
               when "battle"
                 @enterBattle(menu)
 
+              when "death"
+                @setMessage(menu)
+                $('body').pagecontainer("change","#death")
+
+              when "complete"
+                @setMessage(menu)
+                $('body').pagecontainer("change","#complete")
+
 / タイトル
 div data-role="page" id="top" data-theme="b"
   div data-role="content"
     = image_tag "title.png", class: "img-responsive"
     ul data-role="listview" data-inset="true"
       li: a href="#races" キャラクター作成
-      li: a href="#main" 続きから
+      li: a href="#main" @click="setStartPage" 続きから
       li: a href="/pages" data-ajax="false" ゲームマスター画面
 
 / タイトル
@@ -350,7 +326,7 @@ div data-role="page" id="confirm" data-theme="b"
       li: h3 v-text="abilityLabel()"
 
       li data-role="list-divider" 職業
-      li: h3 v-text="pc.job.name"
+      li: h3 v-text="pc.job"
 
     div data-role="controlgroup" data-type="horizontal"
       a href="#main" data-role="button" data-icon="check" @click="setStartPage" 始める
@@ -388,4 +364,4 @@ div data-role="page" id="main" data-theme="b"
             button.ui-btn @click="action(menu.page_5)" v-text="menu.page_5 || '　　　'"
             button.ui-btn @click="action(menu.page_6)" v-text="menu.page_6 || '　　　'"
 
-
+#messages
